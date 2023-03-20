@@ -37,15 +37,25 @@ public class Schedulite {
         contentPane.add(inputDecisionPanel, "inputDecisionPanel");
 
         listenToMenu();
+        listenToInputDecision();
+
         frame.add(contentPane);
         frame.pack();
         frame.setVisible(true);
     }
 
     public void listenToMenu() {
-        menuPanel.getGetStartedButton().addActionListener(e -> cardLayout.show(contentPane, "mainPanel" ));
+        menuPanel.getGetStartedButton().addActionListener(e -> cardLayout.show(contentPane, "inputDecisionPanel" ));
         menuPanel.getHowItWorksButton().addActionListener(e -> cardLayout.show(contentPane, "howPanel" ));
         menuPanel.getExitButton().addActionListener(e -> System.exit(0));
+    }
+
+    public void listenToInputDecision(){
+        inputDecisionPanel.getFromATextFileButton();
+        inputDecisionPanel.getUserDefinedButton();
+        inputDecisionPanel.getRandomButton();
+        inputDecisionPanel.getMusicButton();
+        inputDecisionPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel" ));
     }
 
 }

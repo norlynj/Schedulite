@@ -32,7 +32,7 @@ public class  Frame extends JFrame {
         } catch (InterruptedException e) {
             e.getMessage();
         }
-        
+
         window.dispose(); //disappears then after
     }
 }

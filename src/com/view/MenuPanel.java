@@ -13,6 +13,7 @@ public class MenuPanel extends Panel{
     private ImageButton getStartedButton;
     private ImageButton howItWorksButton;
     private ImageButton exitButton;
+    private ImageButton musicButton;
     private ImageButton infoButton;
 
     public MenuPanel(){
@@ -21,12 +22,14 @@ public class MenuPanel extends Panel{
         getStartedButton = new ImageButton("button/get-started.png");
         howItWorksButton = new ImageButton("button/how.png");
         exitButton = new ImageButton("button/quit.png");
+        musicButton = new ImageButton("button/music-on.png");
         infoButton = new ImageButton("button/info.png");
 
         getStartedButton.setBounds(57, 400, 373, 76);
         howItWorksButton.setBounds(57, 510, 373, 76);
         exitButton.setBounds(57, 620, 373, 76);
-        infoButton.setBounds(1006, 35, 47, 47);
+        musicButton.setBounds(945, 40, 47, 47);
+        infoButton.setBounds(1010, 40, 47, 47);
 
         setListeners();
 
@@ -39,6 +42,7 @@ public class MenuPanel extends Panel{
         bgImage.add(getStartedButton);
         bgImage.add(howItWorksButton);
         bgImage.add(exitButton);
+        bgImage.add(musicButton);
         bgImage.add(infoButton);
 
         this.add(bgImage);
@@ -50,7 +54,7 @@ public class MenuPanel extends Panel{
         howItWorksButton.hover("button/how-hover.png", "button/how.png");
         exitButton.hover("button/quit-hover.png", "button/quit.png");
         infoButton.hover("button/info-hover.png", "button/info.png");
-
+        musicButton.hover("button/music-off-hover.png", "button/music-on.png");
     }
 
     public static void main(String[] args) {

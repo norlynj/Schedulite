@@ -8,11 +8,11 @@ public class Panel extends JPanel {
     private ImageIcon background;
 
     public Panel(String imageName) {
-        this(true, imageName, 0, 0, 700, 700); //panel with bg photo
+        this(true, imageName, 0, 0, 1100, 800); //panel with bg photo
     }
 
     public Panel(boolean visible, String imageName) {
-        this(visible, imageName, 0, 0, 700, 700); //panel with bg photo
+        this(visible, imageName, 0, 0, 1100, 800); //panel with bg photo
     }
 
 

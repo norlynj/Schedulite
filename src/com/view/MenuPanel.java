@@ -26,7 +26,7 @@ public class MenuPanel extends Panel{
         getStartedButton.setBounds(57, 400, 373, 76);
         howItWorksButton.setBounds(57, 510, 373, 76);
         exitButton.setBounds(57, 620, 373, 76);
-        infoButton.setBounds(57, 35, 47, 47);
+        infoButton.setBounds(1006, 35, 47, 47);
 
         setListeners();
 
@@ -34,7 +34,8 @@ public class MenuPanel extends Panel{
 
         JLabel bgImage = new JLabel();
 
-        bgImage.setBounds(0, 0, 700, 700);
+        bgImage.setBounds(0, 0, 1100, 800);
+        bgImage.setIcon(background);
         bgImage.add(getStartedButton);
         bgImage.add(howItWorksButton);
         bgImage.add(exitButton);
@@ -57,5 +58,25 @@ public class MenuPanel extends Panel{
         Frame frame = new Frame("Menu Panel");
         frame.add(m);
         frame.setVisible(true);
+    }
+
+    public Panel getMenu() {
+        return menu;
+    }
+
+    public ImageButton getGetStartedButton() {
+        return getStartedButton;
+    }
+
+    public ImageButton getHowItWorksButton() {
+        return howItWorksButton;
+    }
+
+    public ImageButton getExitButton() {
+        return exitButton;
+    }
+
+    public ImageButton getInfoButton() {
+        return infoButton;
     }
 }

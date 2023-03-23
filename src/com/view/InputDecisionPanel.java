@@ -24,9 +24,9 @@ public class InputDecisionPanel extends Panel{
         musicButton = new ImageButton("button/music-on.png");
         homeButton = new ImageButton("button/home.png");
 
-        fromATextFileButton.setBounds(180, 390, 370, 63);
-        userDefinedButton.setBounds(180, 490, 373, 76);
-        randomButton.setBounds(180, 590, 373, 76);
+        fromATextFileButton.setBounds(57, 390, 370, 63);
+        userDefinedButton.setBounds(57, 490, 373, 76);
+        randomButton.setBounds(57, 590, 373, 76);
         musicButton.setBounds(945, 40, 47, 47);
         homeButton.setBounds(1010, 40, 47, 47);
 

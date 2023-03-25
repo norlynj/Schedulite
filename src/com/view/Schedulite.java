@@ -11,6 +11,7 @@ public class Schedulite {
     private MenuPanel menuPanel;
     private HowPanel howPanel;
     private InputDecisionPanel inputDecisionPanel;
+    private InputPanel inputPanel;
     private MainPanel mainPanel;
     private Panel contentPane;
     private CardLayout cardLayout;
@@ -23,6 +24,7 @@ public class Schedulite {
         howPanel = new HowPanel();
         mainPanel = new MainPanel();
         inputDecisionPanel = new InputDecisionPanel();
+        inputPanel = new InputPanel();
 
         // setup the content pane and card layout
         contentPane = new Panel(true, "bg/menu.png");
@@ -35,9 +37,12 @@ public class Schedulite {
 
         contentPane.add(mainPanel, "mainPanel");
         contentPane.add(inputDecisionPanel, "inputDecisionPanel");
+        contentPane.add(inputPanel, "inputPanel");
 
         listenToMenu();
+        listenToInput();
         listenToInputDecision();
+        listenToHow();
 
         frame.add(contentPane);
         frame.pack();
@@ -52,10 +57,20 @@ public class Schedulite {
 
     public void listenToInputDecision(){
         inputDecisionPanel.getFromATextFileButton();
-        inputDecisionPanel.getUserDefinedButton();
+        inputDecisionPanel.getUserDefinedButton().addActionListener(e -> cardLayout.show(contentPane, "inputPanel" ));
         inputDecisionPanel.getRandomButton();
         inputDecisionPanel.getMusicButton();
         inputDecisionPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel" ));
+    }
+
+    public void listenToHow(){
+        howPanel.getMusicButton();
+        howPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel" ));
+    }
+
+    public void listenToInput(){
+        inputPanel.getMusicButton();
+        inputPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel" ));
     }
 
 }

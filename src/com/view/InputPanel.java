@@ -1,19 +1,19 @@
 package view;
+
 import view.component.Frame;
-import  view.component.ImageButton;
+import view.component.ImageButton;
 import view.component.Panel;
 
 import javax.swing.*;
 import java.util.Objects;
 
-public class HowPanel extends Panel{
-
+public class InputPanel extends Panel {
     private ImageButton musicButton;
     private ImageButton homeButton;
 
-    public HowPanel() {
+    public InputPanel() {
 
-        super("bg/menu.gif");
+        super("bg/temp-input-bg.png");
 
         musicButton = new ImageButton("button/music-on.png");
         homeButton = new ImageButton("button/home.png");
@@ -23,16 +23,13 @@ public class HowPanel extends Panel{
 
         setListeners();
 
-        ImageIcon background = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/images/bg/menu.gif")));
 
-        JLabel bgImage = new JLabel();
 
-        bgImage.setBounds(0, 0, 1100, 800);
-        bgImage.setIcon(background);
-        bgImage.add(musicButton);
-        bgImage.add(homeButton);
 
-        this.add(bgImage);
+
+        this.add(musicButton);
+        this.add(homeButton);
+
     }
 
     private void setListeners() {
@@ -41,8 +38,8 @@ public class HowPanel extends Panel{
     }
 
     public static void main(String[] args) {
-        HowPanel m = new HowPanel();
-        Frame frame = new Frame("How Panel");
+        InputPanel m = new InputPanel();
+        Frame frame = new Frame("Input Panel");
         frame.add(m);
         frame.setVisible(true);
     }
@@ -55,3 +52,4 @@ public class HowPanel extends Panel{
         return homeButton;
     }
 }
+

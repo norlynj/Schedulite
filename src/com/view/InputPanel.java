@@ -9,7 +9,10 @@ import model.CustomTableModel;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.BadLocationException;
@@ -29,12 +32,17 @@ public class InputPanel extends Panel {
 
         super("bg/input-panel.png");
 
-        model = new DefaultTableModel(new String[]{"Process ID", "Burst time", "Arrival time", "Priority Number"}, 3);
+        model = new CustomTableModel(new String[]{"Process ID", "Burst time", "Arrival time", "Priority Number"}, 3);
         table = new JTable(model);
         table.setFillsViewportHeight(true);
         table.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        for (int i = 0; i < model.getRowCount(); i++) {
-            model.setValueAt("P" + (i + 1), i, 0); // set row number in ID column
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Set the renderer for each column in the table
+        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
 
         // Set the font of the JTable header
@@ -179,6 +187,14 @@ public class InputPanel extends Panel {
     private void listenToUserInput() {
         inputValidator(processNum, 3, 30);
         inputValidator(timeQuantum, 1, 10);
+        model.addTableModelListener(e -> {
+                if (validTable()) {
+                    runButton.setEnabled(true);
+                } else{
+                    runButton.setEnabled(false);
+                }
+            }
+        );
     }
 
     private void inputValidator(JTextField input, int minimum, int maximum) {
@@ -211,11 +227,10 @@ public class InputPanel extends Panel {
                         input.setBackground(UIManager.getColor("TextField.background"));
                         if (input.getName().equals("processNum")) {
                             model.setNumRows(value);
-                            for (int i = 0; i < model.getRowCount(); i++) {
-                                model.setValueAt("P" + (i + 1), i, 0); // set row number in ID column
-                            }
                         }
-                        runButton.setEnabled(true);
+                        if (validTable()){
+                            runButton.setEnabled(true);
+                        }
                     }
                 } catch (NumberFormatException ex) {
                     // If the input cannot be parsed as an integer, highlight the text field
@@ -225,6 +240,26 @@ public class InputPanel extends Panel {
         });
     }
 
+    private boolean validTable() {
+        boolean hasNullorBlank = false;
+        for (int row = 0; row < table.getRowCount(); row++) {
+            for (int col = 0; col < table.getColumnCount(); col++) {
+                Object value = table.getValueAt(row, col);
+                if (value == null || value.toString().trim().isEmpty()) {
+                    hasNullorBlank = true;
+                    break;
+                }
+            }
+            if (hasNullorBlank) {
+                break;
+            }
+        }
+        if (hasNullorBlank) {
+            return false;
+        } else {
+           return true;
+        }
+    }
     private static class CustomComboBoxRenderer extends BasicComboBoxRenderer {
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {

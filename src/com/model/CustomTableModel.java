@@ -27,6 +27,15 @@ public class CustomTableModel extends DefaultTableModel {
     }
 
     @Override
+    public Object getValueAt(int row, int col) {
+        // Set value of column 0 to row number
+        if (col == 0) {
+            return "P" + (row + 1);
+        }
+        return super.getValueAt(row, col);
+    }
+
+    @Override
     public void setValueAt(Object value, int row, int column) {
         if (value == null || value.toString().isEmpty()) {
             super.setValueAt(null, row, column);
@@ -50,25 +59,10 @@ public class CustomTableModel extends DefaultTableModel {
             }
 
             super.setValueAt(intValue, row, column);
+
         } catch (NumberFormatException e) {
             fireTableCellUpdated(row, column);
         }
-    }
-
-    public void setMaxBurstTime(int maxBurstTime) {
-        this.maxBurstTime = maxBurstTime;
-    }
-
-    public void setMaxArrivalTime(int maxArrivalTime) {
-        this.maxArrivalTime = maxArrivalTime;
-    }
-
-    public void setMaxPriorityNumber(int maxPriorityNumber) {
-        this.maxPriorityNumber = maxPriorityNumber;
-    }
-
-    public void setMaxTimeQuantum(int maxTimeQuantum) {
-        this.maxTimeQuantum = maxTimeQuantum;
     }
 
 }

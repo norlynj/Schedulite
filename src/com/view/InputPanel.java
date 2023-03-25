@@ -4,6 +4,7 @@ import view.component.Frame;
 import view.component.ImageButton;
 import view.component.Panel;
 import view.component.Label;
+import model.CustomTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -32,6 +33,10 @@ public class InputPanel extends Panel {
         table = new JTable(model);
         table.setFillsViewportHeight(true);
         table.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        for (int i = 0; i < model.getRowCount(); i++) {
+            model.setValueAt("P" + (i + 1), i, 0); // set row number in ID column
+        }
+
         // Set the font of the JTable header
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setFont(new Font("Montserrat", Font.BOLD, 15));
@@ -51,10 +56,13 @@ public class InputPanel extends Panel {
         timeQuantumPlusButton = new ImageButton("button/add.png");
 
         processNum = new JTextField("3", 2);
+        processNum.setName("processNum");
         processNum.setBorder(null);
         processNum.setHorizontalAlignment(SwingConstants.CENTER);
         processNum.setFont(new Font("Montserrat", Font.BOLD, 20));
+
         timeQuantum = new JTextField(2);
+        timeQuantum.setName("timeQuantum");
         timeQuantum.setBorder(null);
         timeQuantum.setHorizontalAlignment(SwingConstants.CENTER);
         timeQuantum.setFont(new Font("Montserrat", Font.BOLD, 20));
@@ -84,6 +92,8 @@ public class InputPanel extends Panel {
         algorithmChoice.setBounds(203, 250, 130, 41);
         removeButton.setBounds(897, 712, 94, 42);
         algoLabel.setBounds(71, 303, 243, 75);
+
+        runButton.setEnabled(false); // should have inputs first
 
         setListeners();
 
@@ -167,7 +177,12 @@ public class InputPanel extends Panel {
         }
     }
     private void listenToUserInput() {
-        processNum.getDocument().addDocumentListener(new DocumentListener() {
+        inputValidator(processNum, 3, 30);
+        inputValidator(timeQuantum, 1, 10);
+    }
+
+    private void inputValidator(JTextField input, int minimum, int maximum) {
+        input.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 validateInput();
@@ -185,54 +200,26 @@ public class InputPanel extends Panel {
 
             private void validateInput() {
                 try {
-                    String text = processNum.getText();
+                    String text = input.getText();
                     int value = Integer.parseInt(text);
-                    if (value < 3 || value > 30) {
+                    if (value < minimum || value > maximum) {
                         // If the value is out of range, highlight the text field
-                        processNum.setBackground(new Color(255, 202, 202));
-
+                        input.setBackground(new Color(255, 202, 202));
+                        runButton.setEnabled(false);
                     } else {
                         // Otherwise, clear the highlighting
-                        processNum.setBackground(UIManager.getColor("TextField.background"));
-                        model.setNumRows(value);
+                        input.setBackground(UIManager.getColor("TextField.background"));
+                        if (input.getName().equals("processNum")) {
+                            model.setNumRows(value);
+                            for (int i = 0; i < model.getRowCount(); i++) {
+                                model.setValueAt("P" + (i + 1), i, 0); // set row number in ID column
+                            }
+                        }
+                        runButton.setEnabled(true);
                     }
                 } catch (NumberFormatException ex) {
                     // If the input cannot be parsed as an integer, highlight the text field
-                    processNum.setBackground(new Color(255, 202, 202));
-                }
-            }
-        });
-
-        timeQuantum.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                validateInput();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                validateInput();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                validateInput();
-            }
-
-            private void validateInput() {
-                try {
-                    String text = timeQuantum.getText();
-                    int value = Integer.parseInt(text);
-                    if (value < 1 || value > 10) {
-                        // If the value is out of range, highlight the text field
-                        timeQuantum.setBackground(new Color(255, 202, 202));
-                    } else {
-                        // Otherwise, clear the highlighting
-                        timeQuantum.setBackground(UIManager.getColor("TextField.background"));
-                    }
-                } catch (NumberFormatException ex) {
-                    // If the input cannot be parsed as an integer, highlight the text field
-                    timeQuantum.setBackground(new Color(255, 202, 202));
+                    input.setBackground(new Color(255, 202, 202));
                 }
             }
         });

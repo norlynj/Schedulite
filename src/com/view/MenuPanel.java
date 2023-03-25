@@ -4,6 +4,8 @@ import  view.component.ImageButton;
 import view.component.Panel;
 
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Objects;
 
 public class MenuPanel extends Panel{
@@ -15,6 +17,7 @@ public class MenuPanel extends Panel{
     private ImageButton exitButton;
     private ImageButton musicButton;
     private ImageButton infoButton;
+    private Panel infoPanel;
 
     public MenuPanel(){
         super("bg/menu.png");
@@ -24,12 +27,15 @@ public class MenuPanel extends Panel{
         exitButton = new ImageButton("button/quit.png");
         musicButton = new ImageButton("button/music-on.png");
         infoButton = new ImageButton("button/info.png");
+        infoPanel = new Panel("bg/info-hover-label.png");
 
         getStartedButton.setBounds(57, 400, 373, 76);
         howItWorksButton.setBounds(57, 510, 373, 76);
         exitButton.setBounds(57, 620, 373, 76);
         musicButton.setBounds(945, 40, 47, 47);
         infoButton.setBounds(1010, 40, 47, 47);
+        infoPanel.setBounds(716, 66, 320, 141);
+        infoPanel.setVisible(false);
 
         setListeners();
 
@@ -44,6 +50,7 @@ public class MenuPanel extends Panel{
         bgImage.add(exitButton);
         bgImage.add(musicButton);
         bgImage.add(infoButton);
+        bgImage.add(infoPanel);
 
         this.add(bgImage);
 
@@ -53,7 +60,10 @@ public class MenuPanel extends Panel{
         getStartedButton.hover("button/get-started-hover.png", "button/get-started.png");
         howItWorksButton.hover("button/how-hover.png", "button/how.png");
         exitButton.hover("button/quit-hover.png", "button/quit.png");
-        infoButton.hover("button/info-hover.png", "button/info.png");
+        infoButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { infoPanel.setVisible(true); }
+            public void mouseExited(MouseEvent e) { infoPanel.setVisible(false); }
+        });
         musicButton.hover("button/music-off-hover.png", "button/music-on.png");
     }
 

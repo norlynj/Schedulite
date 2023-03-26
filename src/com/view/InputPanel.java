@@ -9,13 +9,10 @@ import model.CustomTableModel;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.text.BadLocationException;
 import java.awt.*;
 
 public class InputPanel extends Panel {
@@ -24,7 +21,7 @@ public class InputPanel extends Panel {
     private JComboBox algorithmChoice;
     private JScrollPane tablePane;
     private JTable table;
-    private DefaultTableModel model;
+    private CustomTableModel model;
     private JLabel algoLabel;
 
 
@@ -145,6 +142,7 @@ public class InputPanel extends Panel {
             }
         });
         listenToUserInput();
+        resetButton.addActionListener(e -> model.resetTable());
     }
 
     private void enableTimeQuantum(boolean value) {

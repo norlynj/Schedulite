@@ -65,4 +65,13 @@ public class CustomTableModel extends DefaultTableModel {
         }
     }
 
+    public void resetTable() {
+        for (int i = 0; i < getRowCount(); i++) {
+            for (int j = 1; j < getColumnCount(); j++) {
+                setValueAt(null, i, j);
+            }
+        }
+        priorityNumbers.clear();
+    }
+
 }

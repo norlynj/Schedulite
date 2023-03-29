@@ -198,6 +198,7 @@ public class InputPanel extends Panel {
     public void populateFromATextFile(ArrayList<int[]> textfile) {
         int numRows = textfile.size();
         model.setRowCount(numRows);
+        processNum.setText(String.valueOf(numRows));
         int numCols = 3;
         int[][] valuesArray = new int[numRows][numCols];
         for (int i = 0; i < numRows; i++) {
@@ -385,7 +386,7 @@ public class InputPanel extends Panel {
         algorithmChoice.setSelectedIndex(0);
         enableTimeQuantum(false);
         processNum.setText("3");
-        timeQuantum.setText("");
+        timeQuantum.setText("1");
         model.resetTable();
     }
 

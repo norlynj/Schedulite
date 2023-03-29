@@ -1,5 +1,4 @@
 package view;
-import model.FileChooserExample;
 import view.component.Frame;
 import  view.component.ImageButton;
 import view.component.Panel;
@@ -66,12 +65,12 @@ public class InputDecisionPanel extends Panel{
 
     public ArrayList getDataFromFiles() {
         String resourcePath = "/resources/text/";
-        URL resourceUrl = FileChooserExample.class.getResource(resourcePath);
+        URL resourceUrl = InputDecisionPanel.class.getResource(resourcePath);
 
         // Convert the URL to a file object
         File resourceFile = new File(resourceUrl.getPath());
         JFileChooser fileChooser = new JFileChooser(resourceFile);
-        fileChooser.setDialogTitle("Select input file");
+        fileChooser.setDialogTitle("Select file with processes separated by new line and values separated by comma");
         fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
         int result = fileChooser.showOpenDialog((Component) null);
         if (result != JFileChooser.APPROVE_OPTION) {

@@ -1,10 +1,17 @@
 package view;
 
+
 import view.component.Frame;
 import view.component.ImageButton;
 import view.component.Panel;
 import view.component.Label;
 import model.CustomTableModel;
+import model.FCFS;
+import model.Scheduler;
+import model.Process;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -14,6 +21,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.util.Objects;
 
 public class InputPanel extends Panel {
     private ImageButton musicButton, homeButton, runButton, resetButton, processNumMinusButton, processNumPlusButton, timeQuantumMinusButton, timeQuantumPlusButton, removeButton;
@@ -23,6 +31,7 @@ public class InputPanel extends Panel {
     private JTable table;
     private CustomTableModel model;
     private JLabel algoLabel;
+
 
 
     public InputPanel() {
@@ -239,9 +248,14 @@ public class InputPanel extends Panel {
     }
 
     private boolean validTable() {
+        String selected = (String) algorithmChoice.getSelectedItem();
+        int columnCount = table.getColumnCount();
+        if ((Objects.equals(selected, "Priority(PE)"))|| (Objects.equals(selected, "Priority(NPE)"))){
+            columnCount = table.getColumnCount() - 1;
+        }
         boolean hasNullorBlank = false;
         for (int row = 0; row < table.getRowCount(); row++) {
-            for (int col = 0; col < table.getColumnCount(); col++) {
+            for (int col = 0; col < columnCount; col++) {
                 Object value = table.getValueAt(row, col);
                 if (value == null || value.toString().trim().isEmpty()) {
                     hasNullorBlank = true;
@@ -258,6 +272,50 @@ public class InputPanel extends Panel {
            return true;
         }
     }
+
+    public List<Process> getProcessList() {
+        Scheduler scheduler = new FCFS();
+        String selected = (String) algorithmChoice.getSelectedItem();
+        switch (selected) {
+            case "FCFS":
+                scheduler = new FCFS();
+                break;
+            case "RR":
+                break;
+            case "SJF(PE)":
+                break;
+            case "SJF(NPE)":
+                break;
+            case "Priority(PE)":
+                break;
+            case "Priority(NPE)":
+                break;
+            default:
+                return scheduler.getProcesses();
+        }
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String process = (String) model.getValueAt(i, 0);
+            int burstTime = Integer.parseInt(model.getValueAt(i, 1).toString());
+            int arrivalTime = Integer.parseInt(model.getValueAt(i, 2).toString());
+            int priorityNum;
+
+            if (selected.equals("Priority(PE)") || selected.equals("Priority(NPE)")) {
+                if (!model.getValueAt(i, 3).equals("")) {
+                    priorityNum = Integer.parseInt((String) model.getValueAt(i, 3));
+                }
+                else {
+                    priorityNum = 1;
+                }
+            }
+            else {
+                priorityNum = 1;
+            }
+            scheduler.add(new Process(process, burstTime, arrivalTime, priorityNum));
+        }
+        return scheduler.getProcesses();
+    }
+
     private static class CustomComboBoxRenderer extends BasicComboBoxRenderer {
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -290,5 +348,10 @@ public class InputPanel extends Panel {
     public ImageButton getHomeButton() {
         return homeButton;
     }
+
+    public ImageButton getRunButton() {
+        return runButton;
+    }
+
 }
 

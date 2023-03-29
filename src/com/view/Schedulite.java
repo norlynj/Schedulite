@@ -3,8 +3,11 @@ import view.component.AudioPlayer;
 import  view.component.ImageButton;
 import  view.component.Frame;
 import  view.component.Panel;
+import model.Process;
+
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Schedulite {
     private Frame frame;
@@ -12,6 +15,7 @@ public class Schedulite {
     private HowPanel howPanel;
     private InputDecisionPanel inputDecisionPanel;
     private InputPanel inputPanel;
+    private OutputPanel outputPanel;
     private MainPanel mainPanel;
     private Panel contentPane;
     private CardLayout cardLayout;
@@ -25,6 +29,7 @@ public class Schedulite {
         mainPanel = new MainPanel();
         inputDecisionPanel = new InputDecisionPanel();
         inputPanel = new InputPanel();
+        outputPanel = new OutputPanel();
 
         // setup the content pane and card layout
         contentPane = new Panel(true, "bg/menu.png");
@@ -38,11 +43,13 @@ public class Schedulite {
         contentPane.add(mainPanel, "mainPanel");
         contentPane.add(inputDecisionPanel, "inputDecisionPanel");
         contentPane.add(inputPanel, "inputPanel");
+        contentPane.add(outputPanel, "outputPanel");
 
         listenToMenu();
         listenToInput();
         listenToInputDecision();
         listenToHow();
+        listenToOutput();
 
         frame.add(contentPane);
         frame.pack();
@@ -65,12 +72,21 @@ public class Schedulite {
 
     public void listenToHow(){
         howPanel.getMusicButton();
-        howPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel" ));
+        howPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel"));
     }
 
     public void listenToInput(){
         inputPanel.getMusicButton();
-        inputPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel" ));
+        inputPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel"));
+        inputPanel.getRunButton().addActionListener(e -> {
+            cardLayout.show(contentPane, "outputPanel");
+            outputPanel.setProcessesInTable((ArrayList) inputPanel.getProcessList());
+        });
+    }
+
+    public void listenToOutput() {
+        outputPanel.getMusicButton();
+        outputPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel"));
     }
 
 }

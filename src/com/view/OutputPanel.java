@@ -1,32 +1,109 @@
 package view;
 
+import model.Process;
 import view.component.Frame;
 import view.component.ImageButton;
 import view.component.Panel;
 import view.component.Label;
 import model.CustomTableModel;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
+import java.util.ArrayList;
+
 public class OutputPanel extends Panel{
     private ImageButton musicButton;
     private ImageButton homeButton;
+    private ImageButton playTimerButton;
+    private JScrollPane tablePane;
+    private JTable table;
+
+    private DefaultTableModel model;
+
     public OutputPanel() {
         super("bg/output-panel-bg.png");
 
         musicButton = new ImageButton("button/music-on.png");
         homeButton = new ImageButton("button/home.png");
+        playTimerButton = new ImageButton("button/play-timer-button.png");
 
         musicButton.setBounds(945, 40, 47, 47);
         homeButton.setBounds(1010, 40, 47, 47);
+        playTimerButton.setBounds(65, 165, 40, 40);
+
+        model = new DefaultTableModel(new String[]{"PID", "Burst time", "Arrival time", "Priority Number", "Waiting Time", "Turnaround time", "Avg Waiting time", "Avg Turnaround time"}, 3) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
+        table = new JTable(model);
+        table.setDragEnabled(false);
+        table.setFont(new Font("Montserrat", Font.PLAIN, 15));
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+
+        // Set the renderer for each column in the table
+        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Set the font of the JTable header
+        JTableHeader tableHeader = table.getTableHeader();
+        tableHeader.setFont(new Font("Montserrat", Font.BOLD, 15));
+        tableHeader.setBackground(new Color(223, 235, 246));
+
+        //Add table to scrollpane
+        tablePane = new JScrollPane(table);
+        tablePane.setBounds(43, 322, 1014, 319);
+
+
+
+
+
 
         setListeners();
 
         this.add(musicButton);
         this.add(homeButton);
+        this.add(playTimerButton);
+        this.add(tablePane);
     }
 
     private void setListeners() {
         musicButton.hover("button/music-off-hover.png", "button/music-on.png");
         homeButton.hover("button/home-hover.png", "button/home.png");
+        playTimerButton.hover("button/play-timer-hover.png", "button/play-timer-button.png");
+    }
+
+    public ImageButton getMusicButton() {
+        return musicButton;
+    }
+
+    public ImageButton getHomeButton() {
+        return homeButton;
+    }
+
+    public void setProcessesInTable(ArrayList processes) {
+        System.out.println(((Process) processes.get(0)).getProcessName());
+        model.setRowCount(processes.size());
+
+        for (int i = 0; i < processes.size(); i++) {
+            Process p = ((Process) processes.get(i));
+            model.setValueAt(p.getProcessName(), i, 0 );
+            model.setValueAt(p.getBurstTime(), i, 1);
+            model.setValueAt(p.getArrivalTime(), i, 2);
+            model.setValueAt(p.getPriorityNumber(), i, 3);
+            model.setValueAt(p.getWaitingTime(), i, 4);
+            model.setValueAt(p.getTurnaroundTime(), i, 5);
+        }
     }
 
     public static void main(String[] args) {

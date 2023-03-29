@@ -197,6 +197,7 @@ public class InputPanel extends Panel {
 
     public void populateFromATextFile(ArrayList<int[]> textfile) {
         int numRows = textfile.size();
+        model.setRowCount(numRows);
         int numCols = 3;
         int[][] valuesArray = new int[numRows][numCols];
         for (int i = 0; i < numRows; i++) {

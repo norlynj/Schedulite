@@ -8,19 +8,16 @@ import java.util.Map;
 
 public class PriorityPE extends Scheduler {
     @Override
-    public void simulate()
-    {
+    public void simulate() {
+        // Sorts this.getProcesses() collection in ascending order using arrival time
         Collections.sort(this.getProcesses(), (Object o1, Object o2) -> {
-            if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime())
-            {
+            if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime()) {
                 return 0;
             }
-            else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime())
-            {
+            else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
                 return -1;
             }
-            else
-            {
+            else {
                 return 1;
             }
         });
@@ -28,29 +25,23 @@ public class PriorityPE extends Scheduler {
         List<Process> processes = getCopy(this.getProcesses());
         int time = processes.get(0).getArrivalTime();
 
-        while (!processes.isEmpty())
-        {
+        while (!processes.isEmpty()) {
             List<Process> availableRows = new ArrayList();
 
-            for (Process Process : processes)
-            {
-                if (Process.getArrivalTime() <= time)
-                {
+            for (Process Process : processes) {
+                if (Process.getArrivalTime() <= time) {
                     availableRows.add(Process);
                 }
             }
 
             Collections.sort(availableRows, (Object o1, Object o2) -> {
-                if (((Process) o1).getPriorityNumber()== ((Process) o2).getPriorityNumber())
-                {
+                if (((Process) o1).getPriorityNumber()== ((Process) o2).getPriorityNumber()) {
                     return 0;
                 }
-                else if (((Process) o1).getPriorityNumber() < ((Process) o2).getPriorityNumber())
-                {
+                else if (((Process) o1).getPriorityNumber() < ((Process) o2).getPriorityNumber()) {
                     return -1;
                 }
-                else
-                {
+                else {
                     return 1;
                 }
             });
@@ -59,12 +50,9 @@ public class PriorityPE extends Scheduler {
             this.getTimeline().add(new Event(Process.getProcessName(), time, ++time));
             Process.setBurstTime(Process.getBurstTime() - 1);
 
-            if (Process.getBurstTime() == 0)
-            {
-                for (int i = 0; i < processes.size(); i++)
-                {
-                    if (processes.get(i).getProcessName().equals(Process.getProcessName()))
-                    {
+            if (Process.getBurstTime() == 0) {
+                for (int i = 0; i < processes.size(); i++) {
+                    if (processes.get(i).getProcessName().equals(Process.getProcessName())) {
                         processes.remove(i);
                         break;
                     }
@@ -72,12 +60,10 @@ public class PriorityPE extends Scheduler {
             }
         }
 
-        for (int i = this.getTimeline().size() - 1; i > 0; i--)
-        {
+        for (int i = this.getTimeline().size() - 1; i > 0; i--) {
             List<Event> timeline = this.getTimeline();
 
-            if (timeline.get(i - 1).getProcessName().equals(timeline.get(i).getProcessName()))
-            {
+            if (timeline.get(i - 1).getProcessName().equals(timeline.get(i).getProcessName())) {
                 timeline.get(i - 1).setFinishTime(timeline.get(i).getFinishTime());
                 timeline.remove(i);
             }
@@ -85,21 +71,16 @@ public class PriorityPE extends Scheduler {
 
         Map map = new HashMap();
 
-        for (Process Process : this.getProcesses())
-        {
+        for (Process Process : this.getProcesses()) {
             map.clear();
 
-            for (Event event : this.getTimeline())
-            {
-                if (event.getProcessName().equals(Process.getProcessName()))
-                {
-                    if (map.containsKey(event.getProcessName()))
-                    {
+            for (Event event : this.getTimeline()) {
+                if (event.getProcessName().equals(Process.getProcessName())) {
+                    if (map.containsKey(event.getProcessName())) {
                         int w = event.getStartTime() - (int) map.get(event.getProcessName());
                         Process.setWaitingTime(Process.getWaitingTime() + w);
                     }
-                    else
-                    {
+                    else {
                         Process.setWaitingTime(event.getStartTime() - Process.getArrivalTime());
                     }
 

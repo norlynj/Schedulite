@@ -8,6 +8,7 @@ import model.Process;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Schedulite {
     private Frame frame;
@@ -63,9 +64,19 @@ public class Schedulite {
     }
 
     public void listenToInputDecision(){
-        inputDecisionPanel.getFromATextFileButton();
-        inputDecisionPanel.getUserDefinedButton().addActionListener(e -> cardLayout.show(contentPane, "inputPanel" ));
-        inputDecisionPanel.getRandomButton();
+        inputDecisionPanel.getFromATextFileButton().addActionListener(e -> {
+            cardLayout.show(contentPane, "inputPanel");
+            inputPanel.getRandomizeButton().setVisible(false);
+
+        });
+        inputDecisionPanel.getUserDefinedButton().addActionListener(e -> {
+            cardLayout.show(contentPane, "inputPanel" );
+            inputPanel.getRandomizeButton().setVisible(false);
+        });
+        inputDecisionPanel.getRandomButton().addActionListener(e -> {
+            cardLayout.show(contentPane, "inputPanel" );
+            inputPanel.getRandomizeButton().setVisible(true);
+        });
         inputDecisionPanel.getMusicButton();
         inputDecisionPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel" ));
     }
@@ -80,7 +91,9 @@ public class Schedulite {
         inputPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel"));
         inputPanel.getRunButton().addActionListener(e -> {
             cardLayout.show(contentPane, "outputPanel");
-            outputPanel.setProcessesInTable((ArrayList) inputPanel.getProcessList());
+            outputPanel.setProcessesInTable((ArrayList) inputPanel.getScheduler()
+                    .getProcesses());
+            outputPanel.setChartPanel((ArrayList) inputPanel.getScheduler().getTimeline());
             inputPanel.cleanAllInputs();
         });
     }

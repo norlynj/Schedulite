@@ -95,8 +95,7 @@ public class Schedulite {
         inputPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel"));
         inputPanel.getRunButton().addActionListener(e -> {
             cardLayout.show(contentPane, "outputPanel");
-            outputPanel.setProcessesInTable((ArrayList) inputPanel.getScheduler()
-                    .getProcesses());
+            outputPanel.setProcessesInTable(inputPanel.getScheduler());
             outputPanel.setChartPanel((ArrayList) inputPanel.getScheduler().getTimeline());
             inputPanel.cleanAllInputs();
         });

@@ -1,5 +1,6 @@
 package model;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,10 @@ public abstract class Scheduler {
             avg += process.getWaitingTime();
         }
 
-        return avg / processes.size();
+        DecimalFormat df = new DecimalFormat("#.##");
+        double roundedResult = Double.parseDouble(df.format(avg / processes.size()));
+
+        return roundedResult;
     }
 
     public double getAverageTurnAroundTime()
@@ -49,7 +53,10 @@ public abstract class Scheduler {
             avg += process.getTurnaroundTime();
         }
 
-        return avg / processes.size();
+        DecimalFormat df = new DecimalFormat("#.##");
+        double roundedResult = Double.parseDouble(df.format(avg / processes.size()));
+
+        return roundedResult;
     }
 
     public Event getEvent(Process p)

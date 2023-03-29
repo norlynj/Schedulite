@@ -2,6 +2,7 @@ package view;
 
 import model.Process;
 import model.Event;
+import model.Scheduler;
 import view.component.Frame;
 import view.component.ImageButton;
 import view.component.Panel;
@@ -97,7 +98,8 @@ public class OutputPanel extends Panel{
         return homeButton;
     }
 
-    public void setProcessesInTable(ArrayList processes) {
+    public void setProcessesInTable(Scheduler s) {
+        ArrayList processes = (ArrayList) s.getProcesses();
         System.out.println(((Process) processes.get(0)).getProcessName());
         model.setRowCount(processes.size());
 
@@ -109,6 +111,9 @@ public class OutputPanel extends Panel{
             model.setValueAt(p.getPriorityNumber(), i, 3);
             model.setValueAt(p.getWaitingTime(), i, 4);
             model.setValueAt(p.getTurnaroundTime(), i, 5);
+            model.setValueAt(s.getAverageWaitingTime(), i, 6);
+            model.setValueAt(s.getAverageTurnAroundTime(), i, 7);
+
         }
 
     }

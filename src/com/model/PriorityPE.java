@@ -25,6 +25,9 @@ public class PriorityPE extends Scheduler {
         List<Process> processes = getCopy(this.getProcesses());
         int time = processes.get(0).getArrivalTime();
 
+        // enters a loop that runs until the list of processes is empty
+        // creates an availableRows list and adds to it all the processes whose arrival time is less than or equal to time.
+        // sorted based on their priority number, with higher priority processes being executed first.
         while (!processes.isEmpty()) {
             List<Process> availableRows = new ArrayList();
 
@@ -34,6 +37,7 @@ public class PriorityPE extends Scheduler {
                 }
             }
 
+            // selects the highest priority process from the availableRows list and adds an event to the timeline
             Collections.sort(availableRows, (Object o1, Object o2) -> {
                 if (((Process) o1).getPriorityNumber()== ((Process) o2).getPriorityNumber()) {
                     return 0;

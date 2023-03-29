@@ -154,11 +154,11 @@ public class InputPanel extends Panel {
     private void updateAlgoLabel(String selected){
         switch (selected) {
             case "FCFS":
-                algoLabel.setText("First Come First Served will execute proccesses in the order in which they arrived");
+                algoLabel.setText("First Come First Served will execute processes in the order in which they arrived");
                 enableTimeQuantum(false);
                 break;
             case "RR":
-                algoLabel.setText("Round Robin will execute each proccess for the duration of the time quantum. It will then move on to the next proccess.");
+                algoLabel.setText("Round Robin will execute each process for the duration of the time quantum. It will then move on to the next proccess.");
                 timeQuantum.setText("1");
                 enableTimeQuantum(true);
                 break;

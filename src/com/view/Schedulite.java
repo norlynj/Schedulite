@@ -81,12 +81,16 @@ public class Schedulite {
         inputPanel.getRunButton().addActionListener(e -> {
             cardLayout.show(contentPane, "outputPanel");
             outputPanel.setProcessesInTable((ArrayList) inputPanel.getProcessList());
+            inputPanel.cleanAllInputs();
         });
     }
 
     public void listenToOutput() {
         outputPanel.getMusicButton();
-        outputPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel"));
+        outputPanel.getHomeButton().addActionListener(e -> {
+            cardLayout.show(contentPane, "menuPanel");
+            outputPanel.cleanAllOutput();
+        });
     }
 
 }

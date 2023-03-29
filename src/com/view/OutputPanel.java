@@ -106,6 +106,15 @@ public class OutputPanel extends Panel{
         }
     }
 
+    public void cleanAllOutput() {
+        for (int i = 0; i < model.getRowCount(); i++) {
+            for (int j = 1; j < model.getColumnCount(); j++) {
+                model.setValueAt(null, i, j);
+            }
+        }
+    }
+
+
     public static void main(String[] args) {
         OutputPanel m = new OutputPanel();
         Frame frame = new Frame("Output Panel");

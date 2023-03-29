@@ -1,14 +1,12 @@
 package view;
 
 
+import model.*;
+import model.Process;
 import view.component.Frame;
 import view.component.ImageButton;
 import view.component.Panel;
 import view.component.Label;
-import model.CustomTableModel;
-import model.FCFS;
-import model.Scheduler;
-import model.Process;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,18 +188,20 @@ public class InputPanel extends Panel {
             default:
                 return;
         }
+        updateRunButton();
+    }
+
+    private void updateRunButton() {
+        if (validTable()) {
+            runButton.setEnabled(true);
+        } else{
+            runButton.setEnabled(false);
+        }
     }
     private void listenToUserInput() {
         inputValidator(processNum, 3, 30);
         inputValidator(timeQuantum, 1, 10);
-        model.addTableModelListener(e -> {
-                if (validTable()) {
-                    runButton.setEnabled(true);
-                } else{
-                    runButton.setEnabled(false);
-                }
-            }
-        );
+        model.addTableModelListener(e -> updateRunButton());
     }
 
     private void inputValidator(JTextField input, int minimum, int maximum) {
@@ -250,7 +250,7 @@ public class InputPanel extends Panel {
     private boolean validTable() {
         String selected = (String) algorithmChoice.getSelectedItem();
         int columnCount = table.getColumnCount();
-        if ((Objects.equals(selected, "Priority(PE)"))|| (Objects.equals(selected, "Priority(NPE)"))){
+        if (!((Objects.equals(selected, "Priority(PE)"))|| (Objects.equals(selected, "Priority(NPE)")))){
             columnCount = table.getColumnCount() - 1;
         }
         boolean hasNullorBlank = false;
@@ -281,14 +281,20 @@ public class InputPanel extends Panel {
                 scheduler = new FCFS();
                 break;
             case "RR":
+                scheduler = new RR();
+                scheduler.setTimeQuantum(Integer.parseInt(timeQuantum.getText()));
                 break;
             case "SJF(PE)":
+                scheduler = new SJFPE();
                 break;
             case "SJF(NPE)":
+                scheduler = new SJFNPE();
                 break;
             case "Priority(PE)":
+                scheduler = new PriorityPE();
                 break;
             case "Priority(NPE)":
+                scheduler = new PriorityNPE();
                 break;
             default:
                 return scheduler.getProcesses();
@@ -302,7 +308,7 @@ public class InputPanel extends Panel {
 
             if (selected.equals("Priority(PE)") || selected.equals("Priority(NPE)")) {
                 if (!model.getValueAt(i, 3).equals("")) {
-                    priorityNum = Integer.parseInt((String) model.getValueAt(i, 3));
+                    priorityNum = Integer.parseInt(model.getValueAt(i, 3).toString());
                 }
                 else {
                     priorityNum = 1;
@@ -313,7 +319,16 @@ public class InputPanel extends Panel {
             }
             scheduler.add(new Process(process, burstTime, arrivalTime, priorityNum));
         }
+        scheduler.simulate();
         return scheduler.getProcesses();
+    }
+
+    public void cleanAllInputs() {
+        algorithmChoice.setSelectedIndex(0);
+        enableTimeQuantum(false);
+        processNum.setText("3");
+        timeQuantum.setText("");
+        model.resetTable();
     }
 
     private static class CustomComboBoxRenderer extends BasicComboBoxRenderer {

@@ -78,6 +78,19 @@ public abstract class Scheduler {
         return null;
     }
 
+
+    public static List<Process> getCopy(List<Process> oldList)
+    {
+        List<Process> newList = new ArrayList();
+
+        for (Process Process : oldList)
+        {
+            newList.add(new Process(Process.getProcessName(), Process.getBurstTime(), Process.getArrivalTime(), Process.getPriorityNumber()));
+        }
+
+        return newList;
+    }
+
     public List<Process> getProcesses()
     {
         return processes;

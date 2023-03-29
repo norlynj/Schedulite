@@ -22,23 +22,23 @@ public class FCFS extends Scheduler{
 
         List<Event> timeline = this.getTimeline();
 
-        for (Process row : this.getProcesses())
+        for (Process process : this.getProcesses())
         {
             if (timeline.isEmpty())
             {
-                timeline.add(new Event(row.getProcessName(), row.getArrivalTime(), row.getArrivalTime() + row.getBurstTime()));
+                timeline.add(new Event(process.getProcessName(), process.getArrivalTime(), process.getArrivalTime() + process.getBurstTime()));
             }
             else
             {
                 Event event = timeline.get(timeline.size() - 1);
-                timeline.add(new Event(row.getProcessName(), event.getFinishTime(), event.getFinishTime() + row.getBurstTime()));
+                timeline.add(new Event(process.getProcessName(), event.getFinishTime(), event.getFinishTime() + process.getBurstTime()));
             }
         }
 
-        for (Process row : this.getProcesses())
+        for (Process process : this.getProcesses())
         {
-            row.setWaitingTime(this.getEvent(row).getStartTime() - row.getArrivalTime());
-            row.setTurnaroundTime(row.getWaitingTime() + row.getBurstTime());
+            process.setWaitingTime(this.getEvent(process).getStartTime() - process.getArrivalTime());
+            process.setTurnaroundTime(process.getWaitingTime() + process.getBurstTime());
         }
     }
 }

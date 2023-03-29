@@ -195,8 +195,18 @@ public class InputPanel extends Panel {
 
     }
 
-    public void fromATextFile() {
-
+    public void populateFromATextFile(ArrayList<int[]> textfile) {
+        int numRows = textfile.size();
+        int numCols = 3;
+        int[][] valuesArray = new int[numRows][numCols];
+        for (int i = 0; i < numRows; i++) {
+            valuesArray[i] = textfile.get(i);
+        }
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                model.setValueAt(valuesArray[i][j], i, j+1);
+            }
+        }
     }
 
     private void enableTimeQuantum(boolean value) {

@@ -65,6 +65,10 @@ public class Schedulite {
 
     public void listenToInputDecision(){
         inputDecisionPanel.getFromATextFileButton().addActionListener(e -> {
+            ArrayList textFile = inputDecisionPanel.getDataFromFiles();
+            if (!textFile.isEmpty()) {
+                inputPanel.populateFromATextFile(textFile);
+            }
             cardLayout.show(contentPane, "inputPanel");
             inputPanel.getRandomizeButton().setVisible(false);
 

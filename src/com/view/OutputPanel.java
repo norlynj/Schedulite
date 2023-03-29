@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OutputPanel extends Panel{
-    private ImageButton musicButton;
-    private ImageButton homeButton;
-    private ImageButton playTimerButton;
+    private final ImageButton musicButton, homeButton, playTimerButton;
     private JScrollPane tablePane;
     private JTable table;
 
@@ -70,8 +68,7 @@ public class OutputPanel extends Panel{
 
         //chartPanel
         chartPanel = new CustomPanel();
-        chartPanel.setBackground(Color.lightGray);
-        chartPanel.setBounds(79, 205, 950, 45);
+        chartPanel.setBounds(79, 215, 950, 50);
 
 
 
@@ -130,45 +127,37 @@ public class OutputPanel extends Panel{
         }
     }
 
-    class CustomPanel extends JPanel
-    {
+    class CustomPanel extends JPanel {
         private java.util.List<Event> timeline;
 
         @Override
-        protected void paintComponent(Graphics g)
-        {
+        protected void paintComponent(Graphics g) {
             super.paintComponent(g);
 
-            if (timeline != null)
-            {
-//                int width = 30;
+            if (timeline != null) {
 
-                for (int i = 0; i < timeline.size(); i++)
-                {
+                int x = 30;
+                for (int i = 0; i < timeline.size(); i++) {
                     Event event = timeline.get(i);
-                    int x = 30 * (i + 1);
-                    int y = 20;
-
-                    g.drawRect(x, y, 30, 30);
+                    int y = 1;
+                    int width = (event.getFinishTime() - event.getStartTime()) * 10;
+                    g.drawRect(x, y, width, 30);
                     g.setFont(new Font("Segoe UI", Font.BOLD, 13));
                     g.drawString(event.getProcessName(), x + 10, y + 20);
                     g.setFont(new Font("Segoe UI", Font.PLAIN, 11));
                     g.drawString(Integer.toString(event.getStartTime()), x - 5, y + 45);
 
-                    if (i == timeline.size() - 1)
-                    {
-                        g.drawString(Integer.toString(event.getFinishTime()), x + 27, y + 45);
+                    if (i == timeline.size() - 1) {
+                        g.drawString(Integer.toString(event.getFinishTime()), x + width - 5, y + 45);
                     }
 
-//                    width += 30;
+                    x += width; // Add 10 for spacing between rectangles
                 }
 
-//                this.setPreferredSize(new Dimension(width, 75));
             }
         }
 
-        public void setTimeline(List<Event> timeline)
-        {
+        public void setTimeline(List<Event> timeline) {
             this.timeline = timeline;
             repaint();
         }

@@ -19,7 +19,7 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 
 public class InputPanel extends Panel {
-    private ImageButton musicButton, homeButton, runButton, resetButton, processNumMinusButton, processNumPlusButton, timeQuantumMinusButton, timeQuantumPlusButton, removeButton, randomizeButton;
+    private final ImageButton musicButton, homeButton, runButton, resetButton, processNumMinusButton, processNumPlusButton, timeQuantumMinusButton, timeQuantumPlusButton, removeButton, randomizeButton;
     private JTextField processNum, timeQuantum;
     private JComboBox algorithmChoice;
     private JScrollPane tablePane;

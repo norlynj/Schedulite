@@ -15,11 +15,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class InputDecisionPanel extends Panel{
-    private ImageButton fromATextFileButton;
-    private ImageButton userDefinedButton;
-    private ImageButton randomButton;
-    private ImageButton musicButton;
-    private ImageButton homeButton;
+    private final ImageButton fromATextFileButton, userDefinedButton, randomButton, musicButton, homeButton;
     public InputDecisionPanel() {
         super("bg/menu2.gif");
 
@@ -68,6 +64,7 @@ public class InputDecisionPanel extends Panel{
         URL resourceUrl = InputDecisionPanel.class.getResource(resourcePath);
 
         // Convert the URL to a file object
+        assert resourceUrl != null;
         File resourceFile = new File(resourceUrl.getPath());
         JFileChooser fileChooser = new JFileChooser(resourceFile);
         fileChooser.setDialogTitle("Select file with processes separated by new line and values separated by comma");

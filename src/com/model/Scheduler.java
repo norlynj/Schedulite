@@ -10,8 +10,8 @@ public abstract class Scheduler {
     private int timeQuantum;
 
     public Scheduler(){
-        processes = new ArrayList();
-        timeline = new ArrayList();
+        processes = new ArrayList<>();
+        timeline = new ArrayList<>();
         timeQuantum = 1;
     }
 
@@ -39,9 +39,8 @@ public abstract class Scheduler {
         }
 
         DecimalFormat df = new DecimalFormat("#.##");
-        double roundedResult = Double.parseDouble(df.format(avg / processes.size()));
 
-        return roundedResult;
+        return Double.parseDouble(df.format(avg / processes.size()));
     }
 
     public double getAverageTurnAroundTime()
@@ -54,9 +53,8 @@ public abstract class Scheduler {
         }
 
         DecimalFormat df = new DecimalFormat("#.##");
-        double roundedResult = Double.parseDouble(df.format(avg / processes.size()));
 
-        return roundedResult;
+        return Double.parseDouble(df.format(avg / processes.size()));
     }
 
     public Event getEvent(Process p)
@@ -88,7 +86,7 @@ public abstract class Scheduler {
 
     public static List<Process> getCopy(List<Process> oldList)
     {
-        List<Process> newList = new ArrayList();
+        List<Process> newList = new ArrayList<>();
 
         for (Process Process : oldList)
         {

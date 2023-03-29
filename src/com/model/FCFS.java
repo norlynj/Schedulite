@@ -5,17 +5,12 @@ import java.util.List;
 public class FCFS extends Scheduler{
     @Override
     public void simulate() {
-        Collections.sort(this.getProcesses(), (Object o1, Object o2) -> {
-            if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime())
-            {
+        this.getProcesses().sort((Object o1, Object o2) -> {
+            if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime()) {
                 return 0;
-            }
-            else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime())
-            {
+            } else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
                 return -1;
-            }
-            else
-            {
+            } else {
                 return 1;
             }
         });

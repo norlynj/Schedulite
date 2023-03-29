@@ -16,7 +16,12 @@ public class Schedulite {
     private Panel contentPane;
     private CardLayout cardLayout;
 
+    private AudioPlayer audio;
+
     public Schedulite(){
+        audio = new AudioPlayer("bgmusic.wav");
+        audio.play();
+        audio.loop();
         frame = new Frame("Schedulite");
 
         // create Panels

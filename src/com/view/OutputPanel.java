@@ -68,7 +68,7 @@ public class OutputPanel extends Panel{
 
         //Add table to scrollpane
         tablePane = new JScrollPane(table);
-        tablePane.setBounds(43, 322, 1014, 319);
+        tablePane.setBounds(43, 322, 1014, 400);
 
         //chartPanel
         chartPanel = new CustomPanel();
@@ -165,11 +165,14 @@ public class OutputPanel extends Panel{
 
         public CustomPanel() {
             timer = new Timer(500, e -> {
-                if (currentRect < timeline.size()) {
+                if (currentRect <= timeline.size()) {
                     repaint();
                     currentRect++;
                 } else {
+                    homeButton.setEnabled(true);
                     timer.stop();
+                    currentRect = 0;
+
                 }
             });
         }
@@ -177,11 +180,12 @@ public class OutputPanel extends Panel{
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
+            homeButton.setEnabled(false);
 
             if (timeline != null) {
 
                 int totalDuration = 0;
-                for (int i = 0; i < currentRect; i++) {
+                for (int i = 0; i < currentRect - 1; i++) {
                     Event event = timeline.get(i);
                     totalDuration += event.getFinishTime() - event.getStartTime();
                 }
@@ -191,7 +195,7 @@ public class OutputPanel extends Panel{
                 int x = 5;
 
 
-                for (int i = 0; i < currentRect; i++) {
+                for (int i = 0; i < currentRect - 1; i++) {
                     Event event = timeline.get(i);
                     int y = 1;
                     double percentage = (double) (event.getFinishTime() - event.getStartTime()) / totalDuration;
@@ -214,7 +218,7 @@ public class OutputPanel extends Panel{
 
                     x += width;
 
-                    if (currentRect <= table.getRowCount()) {
+                    if (currentRect <= table.getRowCount() + 1) {
 
                         // find row index in table for current process name
                         int rowIndex = -1;
@@ -249,6 +253,8 @@ public class OutputPanel extends Panel{
 
         public void stopTimer() {
             timer.stop();
+            homeButton.setEnabled(true);
+            currentRect = 0;
         }
     }
 

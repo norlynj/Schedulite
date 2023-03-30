@@ -75,6 +75,7 @@ public class PriorityPE extends Scheduler {
 
         Map map = new HashMap();
 
+        // calculate the waiting time and turnaround time for each process
         for (Process Process : this.getProcesses()) {
             map.clear();
 

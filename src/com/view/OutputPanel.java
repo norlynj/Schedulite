@@ -13,6 +13,8 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -128,13 +130,19 @@ public class OutputPanel extends Panel{
 
         // Sort
         // create a TableRowSorter and set it to the table
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
-        table.setRowSorter(sorter);
+                TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
+                table.setRowSorter(sorter);
 
-        // set the sort keys to sort by PID column in ascending order
-        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-        sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
-        sorter.setSortKeys(sortKeys);
+        // set the sort keys to sort by PID column numerically in ascending order
+        sorter.setComparator(0, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                int num1 = Integer.parseInt(s1.substring(1));
+                int num2 = Integer.parseInt(s2.substring(1));
+                return Integer.compare(num1, num2);
+            }
+        });
+        sorter.setSortKeys(Collections.singletonList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
 
     }
 

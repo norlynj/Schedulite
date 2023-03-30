@@ -1,28 +1,32 @@
 package view;
 
+
+import model.*;
+import model.Process;
 import view.component.Frame;
 import view.component.ImageButton;
 import view.component.Panel;
 import view.component.Label;
-import model.CustomTableModel;
+
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 
 public class InputPanel extends Panel {
-    private ImageButton musicButton, homeButton, runButton, resetButton, processNumMinusButton, processNumPlusButton, timeQuantumMinusButton, timeQuantumPlusButton, removeButton;
+    private final ImageButton musicButton, homeButton, runButton, resetButton, processNumMinusButton, processNumPlusButton, timeQuantumMinusButton, timeQuantumPlusButton, removeButton, randomizeButton;
     private JTextField processNum, timeQuantum;
     private JComboBox algorithmChoice;
     private JScrollPane tablePane;
     private JTable table;
     private CustomTableModel model;
     private JLabel algoLabel;
+
 
 
     public InputPanel() {
@@ -82,6 +86,7 @@ public class InputPanel extends Panel {
         algorithmChoice.setFont(new Font("Montserrat", Font.BOLD, 18));
 
         removeButton = new ImageButton("button/remove.png");
+        randomizeButton = new ImageButton("button/randomize.png");
         algoLabel = new Label("First Come First Served will execute processes in the order which they arrived", true, SwingConstants.LEFT);
 
         musicButton.setBounds(945, 40, 47, 47);
@@ -96,8 +101,10 @@ public class InputPanel extends Panel {
         timeQuantum.setBounds(398, 347, 112, 43);
         algorithmChoice.setBounds(203, 250, 130, 41);
         removeButton.setBounds(897, 712, 94, 42);
+        randomizeButton.setBounds(751, 712, 130, 42);
         algoLabel.setBounds(71, 303, 243, 75);
 
+//        randomizeButton.setVisible(false);
         runButton.setEnabled(false); // should have inputs first
 
         setListeners();
@@ -115,6 +122,7 @@ public class InputPanel extends Panel {
         this.add(algorithmChoice);
         this.add(tablePane);
         this.add(removeButton);
+        this.add(randomizeButton);
         this.add(algoLabel);
 
     }
@@ -129,6 +137,7 @@ public class InputPanel extends Panel {
         timeQuantumMinusButton.hover("button/minus-hover.png", "button/minus.png");
         timeQuantumPlusButton.hover("button/add-hover.png", "button/add.png");
         removeButton.hover("button/remove-hover.png", "button/remove.png");
+        randomizeButton.hover("button/randomize-hover.png", "button/randomize.png");
         algorithmChoice.addActionListener(e -> updateAlgoLabel((String) algorithmChoice.getSelectedItem()));
         processNumPlusButton.addActionListener(e -> processNum.setText(String.valueOf(Integer.parseInt(processNum.getText()) + 1)));
         processNumMinusButton.addActionListener(e -> processNum.setText(String.valueOf(Integer.parseInt(processNum.getText()) - 1)));
@@ -141,8 +150,63 @@ public class InputPanel extends Panel {
                 processNum.setText(String.valueOf(Integer.parseInt(processNum.getText()) - 1));
             }
         });
+        randomizeButton.addActionListener(e -> populateRandomly());
         listenToUserInput();
         resetButton.addActionListener(e -> model.resetTable());
+    }
+
+    public ImageButton getRandomizeButton() {
+        return randomizeButton;
+    }
+
+    // generate random input on process number
+    private void populateRandomly() {
+        Random rand = new Random();
+        Set<Integer> generatedPrioNumbers = new HashSet<>();
+        for (int row = 0; row < table.getRowCount(); row++) {
+
+        int bt = rand.nextInt(30) + 1;
+        int at = rand.nextInt(30) + 1;
+        int tq = rand.nextInt(10) + 1;
+        int pn = 1;
+
+        do {
+            pn = rand.nextInt(20) + 1;
+            if (!generatedPrioNumbers.contains(pn)) {
+                generatedPrioNumbers.add(pn);
+                break;  // exit loop once a unique number is generated
+            }
+        } while (true);
+
+            model.setValueAt(bt, row, 1);
+            model.setValueAt(at, row, 2);
+            String selected = (String) algorithmChoice.getSelectedItem();
+            if (((Objects.equals(selected, "Priority(PE)"))|| (Objects.equals(selected, "Priority(NPE)")))){
+                model.setValueAt(pn, row, 3);
+            } else {
+                model.setValueAt("", row, 3);
+            }
+            if (Objects.equals(selected, "RR")) {
+                timeQuantum.setText(String.valueOf(tq));
+            }
+        }
+
+    }
+
+    public void populateFromATextFile(ArrayList<int[]> textfile) {
+        int numRows = textfile.size();
+        model.setRowCount(numRows);
+        processNum.setText(String.valueOf(numRows));
+        int numCols = 3;
+        int[][] valuesArray = new int[numRows][numCols];
+        for (int i = 0; i < numRows; i++) {
+            valuesArray[i] = textfile.get(i);
+        }
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                model.setValueAt(valuesArray[i][j], i, j+1);
+            }
+        }
     }
 
     private void enableTimeQuantum(boolean value) {
@@ -181,18 +245,20 @@ public class InputPanel extends Panel {
             default:
                 return;
         }
+        updateRunButton();
+    }
+
+    private void updateRunButton() {
+        if (validTable()) {
+            runButton.setEnabled(true);
+        } else{
+            runButton.setEnabled(false);
+        }
     }
     private void listenToUserInput() {
         inputValidator(processNum, 3, 30);
         inputValidator(timeQuantum, 1, 10);
-        model.addTableModelListener(e -> {
-                if (validTable()) {
-                    runButton.setEnabled(true);
-                } else{
-                    runButton.setEnabled(false);
-                }
-            }
-        );
+        model.addTableModelListener(e -> updateRunButton());
     }
 
     private void inputValidator(JTextField input, int minimum, int maximum) {
@@ -239,9 +305,14 @@ public class InputPanel extends Panel {
     }
 
     private boolean validTable() {
+        String selected = (String) algorithmChoice.getSelectedItem();
+        int columnCount = table.getColumnCount();
+        if (!((Objects.equals(selected, "Priority(PE)"))|| (Objects.equals(selected, "Priority(NPE)")))){
+            columnCount = table.getColumnCount() - 1;
+        }
         boolean hasNullorBlank = false;
         for (int row = 0; row < table.getRowCount(); row++) {
-            for (int col = 0; col < table.getColumnCount(); col++) {
+            for (int col = 0; col < columnCount; col++) {
                 Object value = table.getValueAt(row, col);
                 if (value == null || value.toString().trim().isEmpty()) {
                     hasNullorBlank = true;
@@ -258,6 +329,65 @@ public class InputPanel extends Panel {
            return true;
         }
     }
+
+    public Scheduler getScheduler() {
+        Scheduler scheduler = new FCFS();
+        String selected = (String) algorithmChoice.getSelectedItem();
+        switch (selected) {
+            case "FCFS":
+                scheduler = new FCFS();
+                break;
+            case "RR":
+                scheduler = new RR();
+                scheduler.setTimeQuantum(Integer.parseInt(timeQuantum.getText()));
+                break;
+            case "SJF(PE)":
+                scheduler = new SJFPE();
+                break;
+            case "SJF(NPE)":
+                scheduler = new SJFNPE();
+                break;
+            case "Priority(PE)":
+                scheduler = new PriorityPE();
+                break;
+            case "Priority(NPE)":
+                scheduler = new PriorityNPE();
+                break;
+            default:
+                return scheduler;
+        }
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String process = (String) model.getValueAt(i, 0);
+            int burstTime = Integer.parseInt(model.getValueAt(i, 1).toString());
+            int arrivalTime = Integer.parseInt(model.getValueAt(i, 2).toString());
+            int priorityNum;
+
+            if (selected.equals("Priority(PE)") || selected.equals("Priority(NPE)")) {
+                if (!model.getValueAt(i, 3).equals("")) {
+                    priorityNum = Integer.parseInt(model.getValueAt(i, 3).toString());
+                }
+                else {
+                    priorityNum = 1;
+                }
+            }
+            else {
+                priorityNum = 1;
+            }
+            scheduler.add(new Process(process, burstTime, arrivalTime, priorityNum));
+        }
+        scheduler.simulate();
+        return scheduler;
+    }
+
+    public void cleanAllInputs() {
+        algorithmChoice.setSelectedIndex(0);
+        enableTimeQuantum(false);
+        processNum.setText("3");
+        timeQuantum.setText("1");
+        model.resetTable();
+    }
+
     private static class CustomComboBoxRenderer extends BasicComboBoxRenderer {
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -290,5 +420,10 @@ public class InputPanel extends Panel {
     public ImageButton getHomeButton() {
         return homeButton;
     }
+
+    public ImageButton getRunButton() {
+        return runButton;
+    }
+
 }
 

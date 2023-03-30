@@ -16,6 +16,7 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class OutputPanel extends Panel{
     private final ImageButton musicButton, homeButton, playTimerButton;
@@ -143,18 +144,22 @@ public class OutputPanel extends Panel{
                 boolean labelAllowed = timeline.size() < 20;
                 int panelWidth = 950;
                 int x = 0;
+                Random rand = new Random();
 
                 for (int i = 0; i < timeline.size(); i++) {
                     Event event = timeline.get(i);
                     int y = 1;
                     double percentage = (double) (event.getFinishTime() - event.getStartTime()) / totalDuration;
                     int width = (int) (panelWidth * percentage);
-                    g.drawRect(x, y, width, 30);
-                    g.setFont(new Font("Segoe UI", Font.BOLD, 13));
+                    g.setColor(new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)));
+                    g.fillRect(x, y, width, 30);
+                    g.setFont(new Font("Montserrat", Font.BOLD, 13));
+                    g.setColor(Color.black);
                     if (labelAllowed) {
                         g.drawString(event.getProcessName(), x + 10, y + 20);
                         g.drawString(Integer.toString(event.getStartTime()), x - 5, y + 45);
-                    } else if (i == 0) {
+                    } else if (!labelAllowed && (i == 0)) {
+                        g.setColor(Color.black);
                         g.drawString(Integer.toString(event.getStartTime()), x, y + 45);
                     }
 

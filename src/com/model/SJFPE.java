@@ -41,13 +41,13 @@ public class SJFPE extends Scheduler {
                 }
             });
 
-            Process Process = availableRows.get(0);
-            this.getTimeline().add(new Event(Process.getProcessName(), time, ++time));
-            Process.setBurstTime(Process.getBurstTime() - 1);
+            Process process = availableRows.get(0);
+            this.getTimeline().add(new Event(process.getProcessName(), time, ++time));
+            process.setBurstTime(process.getBurstTime() - 1);
 
-            if (Process.getBurstTime() == 0) {
+            if (process.getBurstTime() == 0) {
                 for (int i = 0; i < rows.size(); i++) {
-                    if (rows.get(i).getProcessName().equals(Process.getProcessName())) {
+                    if (rows.get(i).getProcessName().equals(process.getProcessName())) {
                         rows.remove(i);
                         break;
                     }
@@ -66,24 +66,24 @@ public class SJFPE extends Scheduler {
 
         Map map = new HashMap();
 
-        for (Process Process : this.getProcesses()) {
+        for (Process process : this.getProcesses()) {
             map.clear();
 
             for (Event event : this.getTimeline()) {
-                if (event.getProcessName().equals(Process.getProcessName())) {
+                if (event.getProcessName().equals(process.getProcessName())) {
                     if (map.containsKey(event.getProcessName())) {
                         int w = event.getStartTime() - (int) map.get(event.getProcessName());
-                        Process.setWaitingTime(Process.getWaitingTime() + w);
+                        process.setWaitingTime(process.getWaitingTime() + w);
                     }
                     else {
-                        Process.setWaitingTime(event.getStartTime() - Process.getArrivalTime());
+                        process.setWaitingTime(event.getStartTime() - process.getArrivalTime());
                     }
 
                     map.put(event.getProcessName(), event.getFinishTime());
                 }
             }
 
-            Process.setTurnaroundTime(Process.getWaitingTime() + Process.getBurstTime());
+            process.setTurnaroundTime(process.getWaitingTime() + process.getBurstTime());
         }
     }
 }

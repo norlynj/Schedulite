@@ -40,21 +40,21 @@ public class SJFNPE extends Scheduler {
                 }
             });
 
-            Process Process = availableRows.get(0);
-            this.getTimeline().add(new Event(Process.getProcessName(), time, time + Process.getBurstTime()));
-            time += Process.getBurstTime();
+            Process process = availableRows.get(0);
+            this.getTimeline().add(new Event(process.getProcessName(), time, time + process.getBurstTime()));
+            time += process.getBurstTime();
 
             for (int i = 0; i < rows.size(); i++) {
-                if (rows.get(i).getProcessName().equals(Process.getProcessName())) {
+                if (rows.get(i).getProcessName().equals(process.getProcessName())) {
                     rows.remove(i);
                     break;
                 }
             }
         }
 
-        for (Process Process : this.getProcesses()) {
-            Process.setWaitingTime(this.getEvent(Process).getStartTime() - Process.getArrivalTime());
-            Process.setTurnaroundTime(Process.getWaitingTime() + Process.getBurstTime());
+        for (Process process : this.getProcesses()) {
+            process.setWaitingTime(this.getEvent(process).getStartTime() - process.getArrivalTime());
+            process.setTurnaroundTime(process.getWaitingTime() + process.getBurstTime());
         }
     }
 }

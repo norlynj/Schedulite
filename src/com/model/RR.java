@@ -22,22 +22,22 @@ public class RR extends Scheduler {
         int timeQuantum = this.getTimeQuantum();
 
         while (!processes.isEmpty()) {
-            Process Process = processes.get(0);
-            int bt = (Math.min(Process.getBurstTime(), timeQuantum));
-            this.getTimeline().add(new Event(Process.getProcessName(), time, time + bt));
+            Process process = processes.get(0);
+            int bt = (Math.min(process.getBurstTime(), timeQuantum));
+            this.getTimeline().add(new Event(process.getProcessName(), time, time + bt));
             time += bt;
             processes.remove(0);
 
-            if (Process.getBurstTime() > timeQuantum) {
-                Process.setBurstTime(Process.getBurstTime() - timeQuantum);
+            if (process.getBurstTime() > timeQuantum) {
+                process.setBurstTime(process.getBurstTime() - timeQuantum);
 
                 for (int i = 0; i < processes.size(); i++) {
                     if (processes.get(i).getArrivalTime() > time) {
-                        processes.add(i, Process);
+                        processes.add(i, process);
                         break;
                     }
                     else if (i == processes.size() - 1) {
-                        processes.add(Process);
+                        processes.add(process);
                         break;
                     }
                 }
@@ -46,24 +46,24 @@ public class RR extends Scheduler {
 
         Map map = new HashMap();
 
-        for (Process Process : this.getProcesses()) {
+        for (Process process : this.getProcesses()) {
             map.clear();
 
             for (Event event : this.getTimeline()) {
-                if (event.getProcessName().equals(Process.getProcessName())) {
+                if (event.getProcessName().equals(process.getProcessName())) {
                     if (map.containsKey(event.getProcessName())) {
                         int w = event.getStartTime() - (int) map.get(event.getProcessName());
-                        Process.setWaitingTime(Process.getWaitingTime() + w);
+                        process.setWaitingTime(process.getWaitingTime() + w);
                     }
                     else {
-                        Process.setWaitingTime(event.getStartTime() - Process.getArrivalTime());
+                        process.setWaitingTime(event.getStartTime() - process.getArrivalTime());
                     }
 
                     map.put(event.getProcessName(), event.getFinishTime());
                 }
             }
 
-            Process.setTurnaroundTime(Process.getWaitingTime() + Process.getBurstTime());
+            process.setTurnaroundTime(process.getWaitingTime() + process.getBurstTime());
         }
     }
 }

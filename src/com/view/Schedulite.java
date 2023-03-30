@@ -66,6 +66,8 @@ public class Schedulite {
         menuPanel.getGetStartedButton().addActionListener(e -> cardLayout.show(contentPane, "inputDecisionPanel" ));
         menuPanel.getHowItWorksButton().addActionListener(e -> cardLayout.show(contentPane, "howPanel" ));
         menuPanel.getExitButton().addActionListener(e -> System.exit(0));
+        menuPanel.getMusicOnButton().addActionListener(e -> soundClick());
+        menuPanel.getMusicOffButton().addActionListener(e -> soundClick());
     }
 
     public void listenToInputDecision(){
@@ -86,7 +88,8 @@ public class Schedulite {
             cardLayout.show(contentPane, "inputPanel" );
             inputPanel.getRandomizeButton().setVisible(true);
         });
-        inputDecisionPanel.getMusicButton();
+        inputDecisionPanel.getMusicOnButton().addActionListener(e -> soundClick());
+        inputDecisionPanel.getMusicOffButton().addActionListener(e -> soundClick());
         inputDecisionPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel" ));
     }
 
@@ -96,7 +99,8 @@ public class Schedulite {
     }
 
     public void listenToInput(){
-        inputPanel.getMusicButton();
+        inputPanel.getMusicOnButton().addActionListener(e -> soundClick());
+        inputPanel.getMusicOffButton().addActionListener(e -> soundClick());
         inputPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel"));
         inputPanel.getRunButton().addActionListener(e -> {
             cardLayout.show(contentPane, "outputPanel");
@@ -107,11 +111,24 @@ public class Schedulite {
     }
 
     public void listenToOutput() {
-        outputPanel.getMusicButton();
+        outputPanel.getMusicOnButton().addActionListener(e -> soundClick());
+        outputPanel.getMusicOffButton().addActionListener(e -> soundClick());
         outputPanel.getHomeButton().addActionListener(e -> {
             cardLayout.show(contentPane, "menuPanel");
             outputPanel.cleanAllOutput();
         });
+    }
+
+    public void soundClick() {
+        menuPanel.musicClick();
+        inputDecisionPanel.musicClick();
+        inputPanel.musicClick();
+        outputPanel.musicClick();
+        if (audio.isPlaying()) {
+            audio.stop();
+        } else {
+            audio.play();
+        }
     }
 
 }

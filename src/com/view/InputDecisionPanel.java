@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class InputDecisionPanel extends Panel{
-    private final ImageButton fromATextFileButton, userDefinedButton, randomButton, musicButton, homeButton;
+    private final ImageButton fromATextFileButton, userDefinedButton, randomButton, musicOnButton, musicOffButton, homeButton;
     public InputDecisionPanel() {
         super("bg/menu2.gif");
 
@@ -25,15 +25,18 @@ public class InputDecisionPanel extends Panel{
         userDefinedButton = new ImageButton("button/user-defined.png");
         randomButton = new ImageButton("button/random.png");
 
-        musicButton = new ImageButton("button/music-on.png");
+        musicOnButton = new ImageButton("button/music-on.png");
+        musicOffButton = new ImageButton("button/music-off.png");
         homeButton = new ImageButton("button/home.png");
 
         fromATextFileButton.setBounds(57, 390, 370, 63);
         userDefinedButton.setBounds(57, 490, 373, 76);
         randomButton.setBounds(57, 590, 373, 76);
-        musicButton.setBounds(945, 40, 47, 47);
+        musicOnButton.setBounds(945, 40, 47, 47);
+        musicOffButton.setBounds(945, 40, 47, 47);
         homeButton.setBounds(1010, 40, 47, 47);
 
+        musicOffButton.setVisible(false);
         setListeners();
 
         ImageIcon background = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/images/bg/menu.gif")));
@@ -45,7 +48,8 @@ public class InputDecisionPanel extends Panel{
         bgImage.add(fromATextFileButton);
         bgImage.add(userDefinedButton);
         bgImage.add(randomButton);
-        bgImage.add(musicButton);
+        bgImage.add(musicOnButton);
+        bgImage.add(musicOffButton);
         bgImage.add(homeButton);
 
         this.add(bgImage);
@@ -55,7 +59,8 @@ public class InputDecisionPanel extends Panel{
         fromATextFileButton.hover("button/from-file-hover.png", "button/from-file.png");
         userDefinedButton.hover("button/user-defined-hover.png", "button/user-defined.png");
         randomButton.hover("button/random-hover.png", "button/random.png");
-        musicButton.hover("button/music-off-hover.png", "button/music-on.png");
+        musicOnButton.hover("button/music-off-hover.png", "button/music-on.png");
+        musicOffButton.hover("button/music-on-hover.png", "button/music-off.png");
         homeButton.hover("button/home-hover.png", "button/home.png");
     }
 
@@ -103,6 +108,16 @@ public class InputDecisionPanel extends Panel{
         return valuesList;
     }
 
+    public void musicClick() {
+        if (musicOffButton.isVisible()){
+            musicOnButton.setVisible(true);
+            musicOffButton.setVisible(false);
+        } else {
+            musicOnButton.setVisible(false);
+            musicOffButton.setVisible(true);
+        }
+    }
+
 
     public static void main(String[] args) {
         InputDecisionPanel m = new InputDecisionPanel();
@@ -123,8 +138,11 @@ public class InputDecisionPanel extends Panel{
         return randomButton;
     }
 
-    public ImageButton getMusicButton() {
-        return musicButton;
+    public ImageButton getMusicOnButton() {
+        return musicOnButton;
+    }
+    public ImageButton getMusicOffButton() {
+        return musicOffButton;
     }
 
     public ImageButton getHomeButton() {

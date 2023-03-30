@@ -19,7 +19,7 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 
 public class InputPanel extends Panel {
-    private final ImageButton musicButton, homeButton, runButton, resetButton, processNumMinusButton, processNumPlusButton, timeQuantumMinusButton, timeQuantumPlusButton, removeButton, randomizeButton;
+    private final ImageButton musicOnButton, musicOffButton, homeButton, runButton, resetButton, processNumMinusButton, processNumPlusButton, timeQuantumMinusButton, timeQuantumPlusButton, removeButton, randomizeButton;
     private JTextField processNum, timeQuantum;
     private JComboBox algorithmChoice;
     private JScrollPane tablePane;
@@ -55,7 +55,8 @@ public class InputPanel extends Panel {
         tablePane = new JScrollPane(table);
         tablePane.setBounds(110, 426, 880, 267);
 
-        musicButton = new ImageButton("button/music-on.png");
+        musicOnButton = new ImageButton("button/music-on.png");
+        musicOffButton = new ImageButton("button/music-off.png");
         homeButton = new ImageButton("button/home.png");
         runButton = new ImageButton("button/run.png");
         resetButton = new ImageButton("button/reset.png");
@@ -89,7 +90,8 @@ public class InputPanel extends Panel {
         randomizeButton = new ImageButton("button/randomize.png");
         algoLabel = new Label("First Come First Served will execute processes in the order which they arrived", true, SwingConstants.LEFT);
 
-        musicButton.setBounds(945, 40, 47, 47);
+        musicOnButton.setBounds(945, 40, 47, 47);
+        musicOffButton.setBounds(945, 40, 47, 47);
         homeButton.setBounds(1010, 40, 47, 47);
         runButton.setBounds(682, 333, 94, 42);
         resetButton.setBounds(869, 333, 94, 42);
@@ -107,9 +109,12 @@ public class InputPanel extends Panel {
 //        randomizeButton.setVisible(false);
         runButton.setEnabled(false); // should have inputs first
 
+        musicOffButton.setVisible(false);
+
         setListeners();
 
-        this.add(musicButton);
+        this.add(musicOnButton);
+        this.add(musicOffButton);
         this.add(homeButton);
         this.add(runButton);
         this.add(resetButton);
@@ -128,7 +133,8 @@ public class InputPanel extends Panel {
     }
 
     private void setListeners() {
-        musicButton.hover("button/music-off-hover.png", "button/music-on.png");
+        musicOffButton.hover("button/music-on-hover.png", "button/music-off.png");
+        homeButton.hover("button/home-hover.png", "button/home.png");
         homeButton.hover("button/home-hover.png", "button/home.png");
         runButton.hover("button/run-hover.png", "button/run.png");
         resetButton.hover("button/reset-hover.png", "button/reset.png");
@@ -388,6 +394,16 @@ public class InputPanel extends Panel {
         model.resetTable();
     }
 
+    public void musicClick() {
+        if (musicOffButton.isVisible()){
+            musicOnButton.setVisible(true);
+            musicOffButton.setVisible(false);
+        } else {
+            musicOnButton.setVisible(false);
+            musicOffButton.setVisible(true);
+        }
+    }
+
     private static class CustomComboBoxRenderer extends BasicComboBoxRenderer {
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -413,8 +429,11 @@ public class InputPanel extends Panel {
         frame.setVisible(true);
     }
 
-    public ImageButton getMusicButton() {
-        return musicButton;
+    public ImageButton getMusicOnButton() {
+        return musicOnButton;
+    }
+    public ImageButton getMusicOffButton() {
+        return musicOffButton;
     }
 
     public ImageButton getHomeButton() {

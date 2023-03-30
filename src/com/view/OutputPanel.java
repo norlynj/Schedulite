@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 public class OutputPanel extends Panel{
-    private final ImageButton musicButton, homeButton, playTimerButton, stopTimerButton;
+    private final ImageButton musicOnButton, musicOffButton, homeButton, playTimerButton, stopTimerButton;
     private JScrollPane tablePane;
     private JTable table;
 
@@ -30,16 +30,21 @@ public class OutputPanel extends Panel{
     public OutputPanel() {
         super("bg/output-panel-bg.png");
 
-        musicButton = new ImageButton("button/music-on.png");
+        musicOnButton = new ImageButton("button/music-on.png");
+        musicOffButton = new ImageButton("button/music-off.png");
         homeButton = new ImageButton("button/home.png");
         playTimerButton = new ImageButton("button/play-timer-button.png");
         stopTimerButton = new ImageButton("button/stop-timer.png");
 
-        musicButton.setBounds(945, 40, 47, 47);
+        musicOnButton.setBounds(945, 40, 47, 47);
+        musicOffButton.setBounds(945, 40, 47, 47);
         homeButton.setBounds(1010, 40, 47, 47);
         playTimerButton.setBounds(65, 165, 40, 40);
         stopTimerButton.setBounds(65, 165, 40, 40);
         stopTimerButton.setVisible(false);
+
+        musicOffButton.setVisible(false);
+
         model = new DefaultTableModel(new String[]{"Process ID", "Burst time", "Arrival time", "Priority Number", "Waiting Time", "Turnaround time", "Avg Waiting time", "Avg Turnaround time"}, 3) {
 
             @Override
@@ -78,7 +83,8 @@ public class OutputPanel extends Panel{
 
         setListeners();
 
-        this.add(musicButton);
+        this.add(musicOnButton);
+        this.add(musicOffButton);
         this.add(homeButton);
         this.add(playTimerButton);
         this.add(stopTimerButton);
@@ -87,7 +93,8 @@ public class OutputPanel extends Panel{
     }
 
     private void setListeners() {
-        musicButton.hover("button/music-off-hover.png", "button/music-on.png");
+        musicOnButton.hover("button/music-off-hover.png", "button/music-on.png");
+        musicOffButton.hover("button/music-on-hover.png", "button/music-off.png");
         homeButton.hover("button/home-hover.png", "button/home.png");
         playTimerButton.hover("button/play-timer-hover.png", "button/play-timer-button.png");
         playTimerButton.addActionListener(e -> {
@@ -100,10 +107,6 @@ public class OutputPanel extends Panel{
             playTimerButton.setVisible(true);
             stopTimerButton.setVisible(false);
         });
-    }
-
-    public ImageButton getMusicButton() {
-        return musicButton;
     }
 
     public ImageButton getHomeButton() {
@@ -258,6 +261,15 @@ public class OutputPanel extends Panel{
         }
     }
 
+    public void musicClick() {
+        if (musicOffButton.isVisible()){
+            musicOnButton.setVisible(true);
+            musicOffButton.setVisible(false);
+        } else {
+            musicOnButton.setVisible(false);
+            musicOffButton.setVisible(true);
+        }
+    }
 
     public static void main(String[] args) {
         OutputPanel m = new OutputPanel();
@@ -265,6 +277,14 @@ public class OutputPanel extends Panel{
         frame.add(m);
         frame.setVisible(true);
     }
+
+    public ImageButton getMusicOnButton() {
+        return musicOnButton;
+    }
+    public ImageButton getMusicOffButton() {
+        return musicOffButton;
+    }
+
 
 }
 

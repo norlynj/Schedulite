@@ -15,7 +15,7 @@ public class MenuPanel extends Panel{
     private ImageButton getStartedButton;
     private ImageButton howItWorksButton;
     private ImageButton exitButton;
-    private ImageButton musicButton;
+    private ImageButton musicOnButton, musicOffButton;
     private ImageButton infoButton;
     private Panel infoPanel;
 
@@ -25,17 +25,21 @@ public class MenuPanel extends Panel{
         getStartedButton = new ImageButton("button/get-started.png");
         howItWorksButton = new ImageButton("button/how.png");
         exitButton = new ImageButton("button/quit.png");
-        musicButton = new ImageButton("button/music-on.png");
+        musicOnButton = new ImageButton("button/music-on.png");
+        musicOffButton = new ImageButton("button/music-off.png");
         infoButton = new ImageButton("button/info.png");
         infoPanel = new Panel("bg/info-hover-label.png");
 
         getStartedButton.setBounds(57, 400, 373, 76);
         howItWorksButton.setBounds(57, 510, 373, 76);
         exitButton.setBounds(57, 620, 373, 76);
-        musicButton.setBounds(945, 40, 47, 47);
+        musicOnButton.setBounds(945, 40, 47, 47);
+        musicOffButton.setBounds(945, 40, 47, 47);
         infoButton.setBounds(1010, 40, 47, 47);
         infoPanel.setBounds(716, 66, 320, 141);
         infoPanel.setVisible(false);
+
+        musicOffButton.setVisible(false);
 
         setListeners();
 
@@ -48,7 +52,8 @@ public class MenuPanel extends Panel{
         bgImage.add(getStartedButton);
         bgImage.add(howItWorksButton);
         bgImage.add(exitButton);
-        bgImage.add(musicButton);
+        bgImage.add(musicOnButton);
+        bgImage.add(musicOffButton);
         bgImage.add(infoButton);
         bgImage.add(infoPanel);
 
@@ -64,7 +69,25 @@ public class MenuPanel extends Panel{
             public void mouseEntered(MouseEvent e) { infoPanel.setVisible(true); }
             public void mouseExited(MouseEvent e) { infoPanel.setVisible(false); }
         });
-        musicButton.hover("button/music-off-hover.png", "button/music-on.png");
+        musicOnButton.hover("button/music-off-hover.png", "button/music-on.png");
+        musicOffButton.hover("button/music-on-hover.png", "button/music-off.png");
+    }
+
+    public ImageButton getMusicOnButton() {
+        return musicOnButton;
+    }
+    public ImageButton getMusicOffButton() {
+        return musicOffButton;
+    }
+
+    public void musicClick() {
+        if (musicOffButton.isVisible()){
+            musicOnButton.setVisible(true);
+            musicOffButton.setVisible(false);
+        } else {
+            musicOnButton.setVisible(false);
+            musicOffButton.setVisible(true);
+        }
     }
 
     public static void main(String[] args) {

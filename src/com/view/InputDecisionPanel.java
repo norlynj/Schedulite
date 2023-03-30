@@ -67,36 +67,40 @@ public class InputDecisionPanel extends Panel{
         assert resourceUrl != null;
         File resourceFile = new File(resourceUrl.getPath());
         JFileChooser fileChooser = new JFileChooser(resourceFile);
-        fileChooser.setDialogTitle("Select file with processes separated by new line and values separated by comma");
+        fileChooser.setDialogTitle("Select text file");
         fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
         int result = fileChooser.showOpenDialog((Component) null);
-        if (result != JFileChooser.APPROVE_OPTION) {
+        ArrayList<int[]> valuesList = new ArrayList<int[]>();
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            if (selectedFile != null) {
+                // Read the input file and store the values in a 2-dimensional array
+                String inputFileName = fileChooser.getSelectedFile().getPath();
+
+                try (BufferedReader br = new BufferedReader(new FileReader(inputFileName))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        String[] tokens = line.split(",");
+                        if (tokens.length != 3) {
+                            JOptionPane.showMessageDialog(null, "Invalid line: " + line);
+                            continue;
+                        }
+                        int[] values = new int[3];
+                        for (int i = 0; i < 3; i++) {
+                            values[i] = Integer.parseInt(tokens[i]);
+                        }
+                        valuesList.add(values);
+                    }
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Error reading file: " + e.getMessage());
+                    return valuesList;
+                }
+            }
+        } else {
             JOptionPane.showMessageDialog(null, "No file selected");
         }
-
-        // Read the input file and store the values in a 2-dimensional array
-        String inputFileName = fileChooser.getSelectedFile().getPath();
-        ArrayList<int[]> valuesList = new ArrayList<int[]>();
-        try (BufferedReader br = new BufferedReader(new FileReader(inputFileName))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] tokens = line.split(",");
-                if (tokens.length != 3) {
-                    JOptionPane.showMessageDialog(null, "Invalid line: " + line);
-                    continue;
-                }
-                int[] values = new int[3];
-                for (int i = 0; i < 3; i++) {
-                    values[i] = Integer.parseInt(tokens[i]);
-                }
-                valuesList.add(values);
-            }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error reading file: " + e.getMessage());
-            return valuesList;
-        }
         return valuesList;
-
     }
 
 

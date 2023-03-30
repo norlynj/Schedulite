@@ -140,6 +140,7 @@ public class OutputPanel extends Panel{
                 for (Event event : timeline) {
                     totalDuration += event.getFinishTime() - event.getStartTime();
                 }
+                boolean labelAllowed = timeline.size() < 20;
                 int panelWidth = 950;
                 int x = 0;
 
@@ -150,9 +151,12 @@ public class OutputPanel extends Panel{
                     int width = (int) (panelWidth * percentage);
                     g.drawRect(x, y, width, 30);
                     g.setFont(new Font("Segoe UI", Font.BOLD, 13));
-                    g.drawString(event.getProcessName(), x + 10, y + 20);
-                    g.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-                    g.drawString(Integer.toString(event.getStartTime()), x - 5, y + 45);
+                    if (labelAllowed) {
+                        g.drawString(event.getProcessName(), x + 10, y + 20);
+                        g.drawString(Integer.toString(event.getStartTime()), x - 5, y + 45);
+                    } else if (i == 0) {
+                        g.drawString(Integer.toString(event.getStartTime()), x, y + 45);
+                    }
 
                     if (i == timeline.size() - 1) {
                         g.drawString(Integer.toString(event.getFinishTime()), x + width - 5, y + 45);

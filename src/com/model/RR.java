@@ -1,6 +1,5 @@
 package model;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,14 +7,12 @@ import java.util.Map;
 public class RR extends Scheduler {
     @Override
     public void simulate() {
-        Collections.sort(this.getProcesses(), (Object o1, Object o2) -> {
+        this.getProcesses().sort((Object o1, Object o2) -> {
             if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime()) {
                 return 0;
-            }
-            else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
+            } else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
                 return -1;
-            }
-            else {
+            } else {
                 return 1;
             }
         });
@@ -26,7 +23,7 @@ public class RR extends Scheduler {
 
         while (!processes.isEmpty()) {
             Process Process = processes.get(0);
-            int bt = (Process.getBurstTime() < timeQuantum ? Process.getBurstTime() : timeQuantum);
+            int bt = (Math.min(Process.getBurstTime(), timeQuantum));
             this.getTimeline().add(new Event(Process.getProcessName(), time, time + bt));
             time += bt;
             processes.remove(0);

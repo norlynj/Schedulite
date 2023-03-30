@@ -10,14 +10,12 @@ public class PriorityPE extends Scheduler {
     @Override
     public void simulate() {
         // Sorts this.getProcesses() collection in ascending order using arrival time
-        Collections.sort(this.getProcesses(), (Object o1, Object o2) -> {
+        this.getProcesses().sort((Object o1, Object o2) -> {
             if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime()) {
                 return 0;
-            }
-            else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
+            } else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
                 return -1;
-            }
-            else {
+            } else {
                 return 1;
             }
         });
@@ -38,14 +36,12 @@ public class PriorityPE extends Scheduler {
             }
 
             // selects the highest priority process from the availableRows list and adds an event to the timeline
-            Collections.sort(availableRows, (Object o1, Object o2) -> {
-                if (((Process) o1).getPriorityNumber()== ((Process) o2).getPriorityNumber()) {
+            availableRows.sort((Object o1, Object o2) -> {
+                if (((Process) o1).getPriorityNumber() == ((Process) o2).getPriorityNumber()) {
                     return 0;
-                }
-                else if (((Process) o1).getPriorityNumber() < ((Process) o2).getPriorityNumber()) {
+                } else if (((Process) o1).getPriorityNumber() < ((Process) o2).getPriorityNumber()) {
                     return -1;
-                }
-                else {
+                } else {
                     return 1;
                 }
             });

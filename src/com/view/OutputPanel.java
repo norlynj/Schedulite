@@ -7,7 +7,6 @@ import view.component.Frame;
 import view.component.ImageButton;
 import view.component.Panel;
 import view.component.Label;
-import model.CustomTableModel;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class OutputPanel extends Panel{
     private final ImageButton musicOnButton, musicOffButton, homeButton, playTimerButton, stopTimerButton;
@@ -212,7 +210,6 @@ public class OutputPanel extends Panel{
 
                 for (int i = 0; i < currentRect - 1; i++) {
                     Event event = timeline.get(i);
-                    System.out.println("Start Time: " + event.getStartTime());
                     int y = 1;
                     double percentage = (double) (event.getFinishTime() - event.getStartTime()) / totalDuration;
                     int width = (int) (panelWidth * percentage);

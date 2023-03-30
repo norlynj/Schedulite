@@ -9,14 +9,12 @@ import java.util.Map;
 public class SJFPE extends Scheduler {
     @Override
     public void simulate() {
-        Collections.sort(this.getProcesses(), (Object o1, Object o2) -> {
+        this.getProcesses().sort((Object o1, Object o2) -> {
             if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime()) {
                 return 0;
-            }
-            else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
+            } else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
                 return -1;
-            }
-            else {
+            } else {
                 return 1;
             }
         });
@@ -33,14 +31,12 @@ public class SJFPE extends Scheduler {
                 }
             }
 
-            Collections.sort(availableRows, (Object o1, Object o2) -> {
+            availableRows.sort((Object o1, Object o2) -> {
                 if (((Process) o1).getBurstTime() == ((Process) o2).getBurstTime()) {
                     return 0;
-                }
-                else if (((Process) o1).getBurstTime() < ((Process) o2).getBurstTime()) {
+                } else if (((Process) o1).getBurstTime() < ((Process) o2).getBurstTime()) {
                     return -1;
-                }
-                else {
+                } else {
                     return 1;
                 }
             });

@@ -25,7 +25,8 @@ public class OutputPanel extends Panel{
 
     private DefaultTableModel model;
     private CustomPanel chartPanel;
-    private boolean chartIsPlaying = false;
+    private JLabel timerLabel;
+    private long startTime = System.currentTimeMillis();
 
     public OutputPanel() {
         super("bg/output-panel-bg.png");
@@ -35,12 +36,15 @@ public class OutputPanel extends Panel{
         homeButton = new ImageButton("button/home.png");
         playTimerButton = new ImageButton("button/play-timer-button.png");
         stopTimerButton = new ImageButton("button/stop-timer.png");
+        timerLabel = new Label("00:00");
 
         musicOnButton.setBounds(945, 40, 47, 47);
         musicOffButton.setBounds(945, 40, 47, 47);
         homeButton.setBounds(1010, 40, 47, 47);
-        playTimerButton.setBounds(65, 165, 40, 40);
-        stopTimerButton.setBounds(65, 165, 40, 40);
+        playTimerButton.setBounds(70, 162, 40, 40);
+        stopTimerButton.setBounds(70, 162, 40, 40);
+        timerLabel.setBounds(215, 170, 130, 33);
+        timerLabel.setFont(new Font("Montserrat", Font.BOLD, 27));
         stopTimerButton.setVisible(false);
 
         musicOffButton.setVisible(false);
@@ -90,6 +94,7 @@ public class OutputPanel extends Panel{
         this.add(stopTimerButton);
         this.add(tablePane);
         this.add(chartPanel);
+        this.add(timerLabel);
     }
 
     private void setListeners() {
@@ -98,6 +103,7 @@ public class OutputPanel extends Panel{
         homeButton.hover("button/home-hover.png", "button/home.png");
         playTimerButton.hover("button/play-timer-hover.png", "button/play-timer-button.png");
         playTimerButton.addActionListener(e -> {
+            startTime = System.currentTimeMillis();
             chartPanel.animateTimeline();
             playTimerButton.setVisible(false);
             stopTimerButton.setVisible(true);
@@ -154,6 +160,7 @@ public class OutputPanel extends Panel{
     }
 
     public void cleanAllOutput() {
+        timerLabel.setText("00:00");
         for (int i = 0; i < model.getRowCount(); i++) {
             for (int j = 1; j < model.getColumnCount(); j++) {
                 model.setValueAt(null, i, j);
@@ -169,12 +176,17 @@ public class OutputPanel extends Panel{
         public CustomPanel() {
             timer = new Timer(500, e -> {
                 if (currentRect <= timeline.size()) {
+                    long elapsedTime = System.currentTimeMillis() - startTime;
+                    long seconds = (elapsedTime / 1000) % 60;
+                    String time = String.format("%02d:00", seconds);
+                    timerLabel.setText(String.format(time));
                     repaint();
                     currentRect++;
                 } else {
                     homeButton.setEnabled(true);
                     timer.stop();
                     currentRect = 0;
+                    timerLabel.setText("00:00");
 
                 }
             });
@@ -200,6 +212,7 @@ public class OutputPanel extends Panel{
 
                 for (int i = 0; i < currentRect - 1; i++) {
                     Event event = timeline.get(i);
+                    System.out.println("Start Time: " + event.getStartTime());
                     int y = 1;
                     double percentage = (double) (event.getFinishTime() - event.getStartTime()) / totalDuration;
                     int width = (int) (panelWidth * percentage);

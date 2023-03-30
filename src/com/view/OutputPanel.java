@@ -68,7 +68,7 @@ public class OutputPanel extends Panel{
 
         //chartPanel
         chartPanel = new CustomPanel();
-        chartPanel.setBounds(79, 215, 950, 50);
+        chartPanel.setBounds(79, 215, 960, 50);
 
 
 
@@ -136,11 +136,18 @@ public class OutputPanel extends Panel{
 
             if (timeline != null) {
 
-                int x = 30;
+                int totalDuration = 0;
+                for (Event event : timeline) {
+                    totalDuration += event.getFinishTime() - event.getStartTime();
+                }
+                int panelWidth = 950;
+                int x = 0;
+
                 for (int i = 0; i < timeline.size(); i++) {
                     Event event = timeline.get(i);
                     int y = 1;
-                    int width = (event.getFinishTime() - event.getStartTime()) * 10;
+                    double percentage = (double) (event.getFinishTime() - event.getStartTime()) / totalDuration;
+                    int width = (int) (panelWidth * percentage);
                     g.drawRect(x, y, width, 30);
                     g.setFont(new Font("Segoe UI", Font.BOLD, 13));
                     g.drawString(event.getProcessName(), x + 10, y + 20);
@@ -151,7 +158,7 @@ public class OutputPanel extends Panel{
                         g.drawString(Integer.toString(event.getFinishTime()), x + width - 5, y + 45);
                     }
 
-                    x += width; // Add 10 for spacing between rectangles
+                    x += width;
                 }
 
             }

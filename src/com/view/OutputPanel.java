@@ -10,9 +10,7 @@ import view.component.Label;
 import model.CustomTableModel;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
+import javax.swing.table.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +38,7 @@ public class OutputPanel extends Panel{
         playTimerButton.setBounds(65, 165, 40, 40);
         stopTimerButton.setBounds(65, 165, 40, 40);
         stopTimerButton.setVisible(false);
-        model = new DefaultTableModel(new String[]{"PID", "Burst time", "Arrival time", "Priority Number", "Waiting Time", "Turnaround time", "Avg Waiting time", "Avg Turnaround time"}, 3) {
+        model = new DefaultTableModel(new String[]{"Process ID", "Burst time", "Arrival time", "Priority Number", "Waiting Time", "Turnaround time", "Avg Waiting time", "Avg Turnaround time"}, 3) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -128,6 +126,16 @@ public class OutputPanel extends Panel{
 
         }
 
+        // Sort
+        // create a TableRowSorter and set it to the table
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
+        table.setRowSorter(sorter);
+
+        // set the sort keys to sort by PID column in ascending order
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+        sorter.setSortKeys(sortKeys);
+
     }
 
     public void setChartPanel(ArrayList timeline) {
@@ -199,8 +207,18 @@ public class OutputPanel extends Panel{
                     x += width;
 
                     if (currentRect <= table.getRowCount()) {
+
+                        // find row index in table for current process name
+                        int rowIndex = -1;
+                        for (int j = 0; j < table.getRowCount(); j++) {
+                            String processId = (String) table.getValueAt(j, 0);
+                            if (processId.equals(event.getProcessName())) {
+                                rowIndex = j;
+                                break;
+                            }
+                        }
                         table.clearSelection();
-                        table.addRowSelectionInterval(currentRect-1, currentRect-1);
+                        table.addRowSelectionInterval(rowIndex, rowIndex);
                         table.setSelectionBackground(event.getColor());
                         if (table.getSelectedRow() == table.getRowCount() - 1) {
                             playTimerButton.setVisible(true);

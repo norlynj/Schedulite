@@ -86,6 +86,9 @@ public class OutputPanel extends Panel{
         musicButton.hover("button/music-off-hover.png", "button/music-on.png");
         homeButton.hover("button/home-hover.png", "button/home.png");
         playTimerButton.hover("button/play-timer-hover.png", "button/play-timer-button.png");
+        playTimerButton.addActionListener(e -> {
+            chartPanel.animateTimeline();
+        });
     }
 
     public ImageButton getMusicButton() {
@@ -130,28 +133,42 @@ public class OutputPanel extends Panel{
 
     class CustomPanel extends JPanel {
         private java.util.List<Event> timeline;
+        private int currentRect = 0;
+        private Timer timer;
+
+        public CustomPanel() {
+            timer = new Timer(500, e -> {
+                if (currentRect < timeline.size()) {
+                    repaint();
+                    currentRect++;
+                } else {
+                    timer.stop();
+                }
+            });
+        }
 
         @Override
-        protected void paintComponent(Graphics g) {
+        public void paintComponent(Graphics g) {
             super.paintComponent(g);
 
             if (timeline != null) {
 
                 int totalDuration = 0;
-                for (Event event : timeline) {
+                for (int i = 0; i < currentRect; i++) {
+                    Event event = timeline.get(i);
                     totalDuration += event.getFinishTime() - event.getStartTime();
                 }
+
                 boolean labelAllowed = timeline.size() < 20;
                 int panelWidth = 950;
                 int x = 0;
-                Random rand = new Random();
 
-                for (int i = 0; i < timeline.size(); i++) {
+                for (int i = 0; i < currentRect; i++) {
                     Event event = timeline.get(i);
                     int y = 1;
                     double percentage = (double) (event.getFinishTime() - event.getStartTime()) / totalDuration;
                     int width = (int) (panelWidth * percentage);
-                    g.setColor(new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)));
+                    g.setColor(event.getColor());
                     g.fillRect(x, y, width, 30);
                     g.setFont(new Font("Montserrat", Font.BOLD, 13));
                     g.setColor(Color.black);
@@ -163,16 +180,19 @@ public class OutputPanel extends Panel{
                         g.drawString(Integer.toString(event.getStartTime()), x, y + 45);
                     }
 
-                    if (i == timeline.size() - 1) {
+                    if (i == currentRect) {
                         g.drawString(Integer.toString(event.getFinishTime()), x + width - 5, y + 45);
                     }
 
                     x += width;
                 }
-
             }
         }
 
+        public void animateTimeline() {
+            currentRect = 0;
+            timer.start();
+        }
         public void setTimeline(List<Event> timeline) {
             this.timeline = timeline;
             repaint();

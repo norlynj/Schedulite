@@ -70,7 +70,7 @@ public class OutputPanel extends Panel{
 
         //chartPanel
         chartPanel = new CustomPanel();
-        chartPanel.setBounds(79, 215, 960, 50);
+        chartPanel.setBounds(79, 215, 970, 50);
 
 
 
@@ -180,7 +180,7 @@ public class OutputPanel extends Panel{
 
                 boolean labelAllowed = timeline.size() < 20;
                 int panelWidth = 950;
-                int x = 0;
+                int x = 5;
 
 
                 for (int i = 0; i < currentRect; i++) {
@@ -194,7 +194,7 @@ public class OutputPanel extends Panel{
                     g.setColor(Color.black);
                     if (labelAllowed) {
                         g.drawString(event.getProcessName(), x + 10, y + 20);
-                        g.drawString(Integer.toString(event.getStartTime()), x - 5, y + 45);
+                        g.drawString(Integer.toString(event.getStartTime() - 1), x - 5, y + 45);
                     } else if (!labelAllowed && (i == 0)) {
                         g.setColor(Color.black);
                         g.drawString(Integer.toString(event.getStartTime()), x, y + 45);

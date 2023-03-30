@@ -19,12 +19,13 @@ import java.util.List;
 import java.util.Random;
 
 public class OutputPanel extends Panel{
-    private final ImageButton musicButton, homeButton, playTimerButton;
+    private final ImageButton musicButton, homeButton, playTimerButton, stopTimerButton;
     private JScrollPane tablePane;
     private JTable table;
 
     private DefaultTableModel model;
     private CustomPanel chartPanel;
+    private boolean chartIsPlaying = false;
 
     public OutputPanel() {
         super("bg/output-panel-bg.png");
@@ -32,11 +33,13 @@ public class OutputPanel extends Panel{
         musicButton = new ImageButton("button/music-on.png");
         homeButton = new ImageButton("button/home.png");
         playTimerButton = new ImageButton("button/play-timer-button.png");
+        stopTimerButton = new ImageButton("button/stop-timer.png");
 
         musicButton.setBounds(945, 40, 47, 47);
         homeButton.setBounds(1010, 40, 47, 47);
         playTimerButton.setBounds(65, 165, 40, 40);
-
+        stopTimerButton.setBounds(65, 165, 40, 40);
+        stopTimerButton.setVisible(false);
         model = new DefaultTableModel(new String[]{"PID", "Burst time", "Arrival time", "Priority Number", "Waiting Time", "Turnaround time", "Avg Waiting time", "Avg Turnaround time"}, 3) {
 
             @Override
@@ -78,6 +81,7 @@ public class OutputPanel extends Panel{
         this.add(musicButton);
         this.add(homeButton);
         this.add(playTimerButton);
+        this.add(stopTimerButton);
         this.add(tablePane);
         this.add(chartPanel);
     }
@@ -88,6 +92,13 @@ public class OutputPanel extends Panel{
         playTimerButton.hover("button/play-timer-hover.png", "button/play-timer-button.png");
         playTimerButton.addActionListener(e -> {
             chartPanel.animateTimeline();
+            playTimerButton.setVisible(false);
+            stopTimerButton.setVisible(true);
+        });
+        stopTimerButton.addActionListener( e -> {
+            chartPanel.stopTimer();
+            playTimerButton.setVisible(true);
+            stopTimerButton.setVisible(false);
         });
     }
 
@@ -163,6 +174,7 @@ public class OutputPanel extends Panel{
                 int panelWidth = 950;
                 int x = 0;
 
+
                 for (int i = 0; i < currentRect; i++) {
                     Event event = timeline.get(i);
                     int y = 1;
@@ -185,7 +197,18 @@ public class OutputPanel extends Panel{
                     }
 
                     x += width;
+
+                    if (currentRect <= table.getRowCount()) {
+                        table.clearSelection();
+                        table.addRowSelectionInterval(currentRect-1, currentRect-1);
+                        table.setSelectionBackground(event.getColor());
+                        if (table.getSelectedRow() == table.getRowCount() - 1) {
+                            playTimerButton.setVisible(true);
+                            stopTimerButton.setVisible(false);
+                        }
+                    }
                 }
+
             }
         }
 
@@ -196,6 +219,10 @@ public class OutputPanel extends Panel{
         public void setTimeline(List<Event> timeline) {
             this.timeline = timeline;
             repaint();
+        }
+
+        public void stopTimer() {
+            timer.stop();
         }
     }
 

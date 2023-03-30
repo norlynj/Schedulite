@@ -37,13 +37,7 @@ public class PriorityNPE extends Scheduler {
             }
 
             availableRows.sort((Object o1, Object o2) -> {
-                if (((Process) o1).getPriorityNumber() == ((Process) o2).getPriorityNumber()) {
-                    return 0;
-                } else if (((Process) o1).getPriorityNumber() < ((Process) o2).getPriorityNumber()) {
-                    return -1;
-                } else {
-                    return 1;
-                }
+                return Integer.compare(((Process) o1).getPriorityNumber(), ((Process) o2).getPriorityNumber());
             });
 
             Process process = availableRows.get(0);

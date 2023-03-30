@@ -8,13 +8,7 @@ public class RR extends Scheduler {
     @Override
     public void simulate() {
         this.getProcesses().sort((Object o1, Object o2) -> {
-            if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime()) {
-                return 0;
-            } else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return Integer.compare(((Process) o1).getArrivalTime(), ((Process) o2).getArrivalTime());
         });
 
         List<Process> processes = getCopy(this.getProcesses());
@@ -44,7 +38,7 @@ public class RR extends Scheduler {
             }
         }
 
-        Map map = new HashMap();
+        Map map = new HashMap(); // keep track of the previous events of a process to get waiting time
 
         for (Process process : this.getProcesses()) {
             map.clear();
@@ -60,6 +54,7 @@ public class RR extends Scheduler {
                     }
 
                     map.put(event.getProcessName(), event.getFinishTime());
+
                 }
             }
 

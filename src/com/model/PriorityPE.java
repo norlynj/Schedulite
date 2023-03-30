@@ -11,42 +11,30 @@ public class PriorityPE extends Scheduler {
     public void simulate() {
         // Sorts this.getProcesses() collection in ascending order using arrival time
         this.getProcesses().sort((Object o1, Object o2) -> {
-            if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime()) {
-                return 0;
-            } else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return Integer.compare(((Process) o1).getArrivalTime(), ((Process) o2).getArrivalTime());
         });
 
         List<Process> processes = getCopy(this.getProcesses());
         int time = processes.get(0).getArrivalTime();
 
         // enters a loop that runs until the list of processes is empty
-        // creates an availableRows list and adds to it all the processes whose arrival time is less than or equal to time.
+        // creates an availableProcesses list and adds to it all the processes whose arrival time is less than or equal to time.
         // sorted based on their priority number, with higher priority processes being executed first.
         while (!processes.isEmpty()) {
-            List<Process> availableRows = new ArrayList();
+            List<Process> availableProcesses = new ArrayList();
 
             for (Process process : processes) {
                 if (process.getArrivalTime() <= time) {
-                    availableRows.add(process);
+                    availableProcesses.add(process);
                 }
             }
 
-            // selects the highest priority process from the availableRows list and adds an event to the timeline
-            availableRows.sort((Object o1, Object o2) -> {
-                if (((Process) o1).getPriorityNumber() == ((Process) o2).getPriorityNumber()) {
-                    return 0;
-                } else if (((Process) o1).getPriorityNumber() < ((Process) o2).getPriorityNumber()) {
-                    return -1;
-                } else {
-                    return 1;
-                }
+            // selects the highest priority process from the availableProcesses list and adds an event to the timeline
+            availableProcesses.sort((Object o1, Object o2) -> {
+                return Integer.compare(((Process) o1).getPriorityNumber(), ((Process) o2).getPriorityNumber());
             });
 
-            Process process = availableRows.get(0);
+            Process process = availableProcesses.get(0);
             this.getTimeline().add(new Event(process.getProcessName(), time, ++time));
             process.setBurstTime(process.getBurstTime() - 1);
 
@@ -69,7 +57,7 @@ public class PriorityPE extends Scheduler {
             }
         }
 
-        Map map = new HashMap();
+        Map map = new HashMap(); // keep track of the previous events of a process to get
 
         // calculate the waiting time and turnaround time for each process
         for (Process process : this.getProcesses()) {

@@ -14,13 +14,7 @@ public class FCFS extends Scheduler{
     @Override
     public void simulate() {
         this.getProcesses().sort((Object o1, Object o2) -> {
-            if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime()) {
-                return 0;
-            } else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return Integer.compare(((Process) o1).getArrivalTime(), ((Process) o2).getArrivalTime());
         });
 
         List<Event> timeline = this.getTimeline();

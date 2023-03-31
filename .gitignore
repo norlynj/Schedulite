@@ -24,3 +24,4 @@ hs_err_pid*
 /out/
 src/src.iml
 src/src.iml
+src/com/resources/META-INF/MANIFEST.MF

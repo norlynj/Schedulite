@@ -94,7 +94,8 @@ public class Schedulite {
     }
 
     public void listenToHow(){
-        howPanel.getMusicButton();
+        howPanel.getMusicOnButton().addActionListener(e -> soundClick());
+        howPanel.getMusicOffButton().addActionListener(e -> soundClick());
         howPanel.getHomeButton().addActionListener(e -> cardLayout.show(contentPane, "menuPanel"));
     }
 
@@ -124,6 +125,7 @@ public class Schedulite {
         inputDecisionPanel.musicClick();
         inputPanel.musicClick();
         outputPanel.musicClick();
+        howPanel.musicClick();
         if (audio.isPlaying()) {
             audio.stop();
         } else {

@@ -8,27 +8,31 @@ import java.util.Objects;
 
 public class HowPanel extends Panel{
 
-    private ImageButton musicButton, homeButton, defButton, termsButton, backButton;
+    private ImageButton musicOnButton, musicOffButton, homeButton, defButton, termsButton, backButton;
     public HowPanel() {
 
         super("bg/how-it-works.png");
 
-        musicButton = new ImageButton("button/music-on.png");
+        musicOnButton = new ImageButton("button/music-on.png");
+        musicOffButton = new ImageButton("button/music-off.png");
         homeButton = new ImageButton("button/home.png");
         defButton = new ImageButton("button/definition.png");
         termsButton = new ImageButton("button/terms.png");
         backButton = new ImageButton("button/back.png");
 
-        musicButton.setBounds(945, 40, 47, 47);
+        musicOnButton.setBounds(945, 40, 47, 47);
+        musicOffButton.setBounds(945, 40, 47, 47);
         homeButton.setBounds(1010, 40, 47, 47);
         defButton.setBounds(187, 666, 353, 47);
         termsButton.setBounds(572, 666, 256, 47);
         backButton.setBounds(282, 112, 47, 47);
 
         backButton.setVisible(false);
+        musicOffButton.setVisible(false);
         setListeners();
 
-        this.add(musicButton);
+        this.add(musicOnButton);
+        this.add(musicOffButton);
         this.add(homeButton);
         this.add(defButton);
         this.add(termsButton);
@@ -36,7 +40,8 @@ public class HowPanel extends Panel{
     }
 
     private void setListeners() {
-        musicButton.hover("button/music-off-hover.png", "button/music-on.png");
+        musicOnButton.hover("button/music-off-hover.png", "button/music-on.png");
+        musicOffButton.hover("button/music-on-hover.png", "button/music-off.png");
         homeButton.hover("button/home-hover.png", "button/home.png");
         defButton.hover("button/definition-hover.png", "button/definition.png");
         termsButton.hover("button/terms-hover.png", "button/terms.png");
@@ -69,6 +74,16 @@ public class HowPanel extends Panel{
         });
     }
 
+    public void musicClick() {
+        if (musicOffButton.isVisible()){
+            musicOnButton.setVisible(true);
+            musicOffButton.setVisible(false);
+        } else {
+            musicOnButton.setVisible(false);
+            musicOffButton.setVisible(true);
+        }
+    }
+
     public static void main(String[] args) {
         HowPanel m = new HowPanel();
         Frame frame = new Frame("How Panel");
@@ -76,8 +91,11 @@ public class HowPanel extends Panel{
         frame.setVisible(true);
     }
 
-    public ImageButton getMusicButton() {
-        return musicButton;
+    public ImageButton getMusicOnButton() {
+        return musicOnButton;
+    }
+    public ImageButton getMusicOffButton() {
+        return musicOffButton;
     }
 
     public ImageButton getHomeButton() {

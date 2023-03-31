@@ -178,8 +178,11 @@ public class OutputPanel extends Panel{
                     long seconds = (elapsedTime / 1000) % 60;
                     String time = String.format("%02d:00", seconds);
                     timerLabel.setText(String.format(time));
-                    repaint();
-                    currentRect++;
+                    if (getArrivalTime() <= seconds) {
+                        repaint();
+                        currentRect++;
+                    }
+
                 } else {
                     homeButton.setEnabled(true);
                     timer.stop();
@@ -268,6 +271,19 @@ public class OutputPanel extends Panel{
             timer.stop();
             homeButton.setEnabled(true);
             currentRect = 0;
+        }
+
+        public int getArrivalTime() {
+            if (currentRect == 0) {
+                return timeline.get(0).getStartTime();
+            }
+            for (int i = 0; i < table.getRowCount(); i++) {
+                Object firstColumnValue = model.getValueAt(i, 0);
+                if (firstColumnValue.equals(timeline.get(currentRect-1).getProcessName())) {
+                    return (int) model.getValueAt(i, 2);
+                }
+            }
+            return 0;
         }
     }
 
